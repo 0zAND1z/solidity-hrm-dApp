@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="import" href="../../headers.html">
+</head>
+<body>
+  <div class="container-fluid">
+    <h1 class="jumbotron">Aicumen Job Positions</h1>
+    <br>
+    <ul id="jobsList">
+      <li class="row" id="jobsHeader">
+        <div class="col-md-4 font-weight-bold">JOB id</div>
+        <label class="col-md-4 font-weight-bold">JOB title</label>
+        <label class="col-md-4 font-weight-bold">JOB Description</label>
+      </li>
+    </br>
+    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
+  </ul>
+</div>
+</body>
+
+<script type="text/javascript">
+$('document').ready(function(){
+  //refresh jobsList
+  addJobs();
+});
+
+const path="website/employer";
+
+function addJobs(){
+  var jobsList = '{ "jobs" : [' +
+  '{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
+  '{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
+
+  var parsedJson = JSON.parse(jobsList);
+  for(i=0; i < parsedJson.jobs.length ; i++){
+    var jobs = document.getElementsByClassName("jobs");
+    $("#jobsList").append('<li class="row">' +
+    '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
+    '<a class="col-md-4 font-weight-bold" href="' + path + "/" + parsedJson.jobs[i] +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
+    '<a class="col-md-4" href="' + parsedJson.jobs[i].jobDescription +'" >  View JD  </div>' +
+    '</li>' +
+    '<br>');
+  };
+}
+</script>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Job Positions | Apply</title>
+  <link rel="import" href="../../headers.html">
+</head>
+<body>
+  <div class="container-fluid">
+    <h1 class="jumbotron">Job Details</h1>
+    <br>
+    <ul class="jobs">
+      <li class="row">
+          <div class="col-md font-weight-bold">JOB id</div>
+          <label class="col-md font-weight-bold">JOB title</label>
+      </li>
+    </br>
+    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
+    </ul>
+  </div>
+  <form method="post()" onsubmit="confirm()">
+  <div id="applicationForm" class="form-group" hidden>
+    <label for="jobID">JOB id</label><br>
+    <input name="jobID" disabled id="jobID" value=""></input><br>
+    <label for="emailAddress">Email address</label><br>
+    <input required name="email" type="email" class="form-control" id="emailAddress" placeholder="Enter email"><br>
+    <label for="fullName">Full Name</label><br>
+    <input required name="fullName" type="fullName" class="form-control" id="fullName" placeholder="Full Name"><br>
+    <!-- <button type="submit" class="btn btn-success">Submit applicaton</button> -->
+  </div>
+</form>
+</body>
+<script type="text/javascript">
+$('document').ready{
+
+}
+  function showApplicationForm(){
+    document.getElementById("applicationForm").removeAttribute("hidden");
+    document.getElementByID("jobID").value;
+  }
+  function confirm(){
+    alert("Please confirm to submit");
+  }
+</script>
+</html>

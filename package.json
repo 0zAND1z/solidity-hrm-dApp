@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/kggp1995/solidity-hrm-dApp/issues"
   },
-  "homepage": "https://github.com/kggp1995/solidity-hrm-dApp#readme"
+  "homepage": "https://github.com/kggp1995/solidity-hrm-dApp#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "express": "^4.16.2"
+  }
 }
