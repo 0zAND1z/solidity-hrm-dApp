@@ -2,7 +2,10 @@
 <html>
 <head>
   <title>Dashboard</title>
-  <link rel="import" href="../../headers.html">
+  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
+  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
 <body>
   <div class="container-fluid">
@@ -17,32 +20,39 @@
     </br>
     <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </ul>
+  <a id="addNewJob" type="button" class="btn btn-success" href="/website/employer/addnewjob.html">Add a job</a>
 </div>
 </body>
 
 <script type="text/javascript">
 $('document').ready(function(){
   //refresh jobsList
-  addJobs();
+  refreshJobs();
 });
+function showApplicationForm(){
+  document.getElementById("applicationForm").removeAttribute("hidden");
+  document.getElementByID("jobID").value;
+};
 
-const path="website/employer";
+var path="website/applicant/jobpage.html";
 
-function addJobs(){
-  var jobsList = '{ "jobs" : [' +
-  '{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
-  '{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
+var jobsList = '{ "jobs" : [' +
+'{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
+'{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
+
+function refreshJobs(){
 
   var parsedJson = JSON.parse(jobsList);
   for(i=0; i < parsedJson.jobs.length ; i++){
     var jobs = document.getElementsByClassName("jobs");
     $("#jobsList").append('<li class="row">' +
     '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
-    '<a class="col-md-4 font-weight-bold" href="' + path + "/" + parsedJson.jobs[i] +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
+    '<a class="col-md-4 font-weight-bold" href="' + path + parsedJson.jobs[i].jobURL +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
     '<a class="col-md-4" href="' + parsedJson.jobs[i].jobDescription +'" >  View JD  </div>' +
     '</li>' +
     '<br>');
   };
 }
+
 </script>
 </html>
