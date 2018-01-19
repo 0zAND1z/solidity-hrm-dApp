@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add a Job</title>
+  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
+  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+</head>
+<body>
+  <div class="container-fluid">
+    <form method="post" onsubmit="confirm()" class="form-group" >
+        <label for="jobID">JOB id</label><br>
+        <input name="jobID" disabled id="jobID" value=""></input><br>
+        <label for="jobTitle">JOB title</label><br>
+        <input name="" type="email" class="form-control" id="emailAddress" placeholder="Enter email"><br>
+        <label for="fullName">Full Name</label><br>
+        <input name="JDName" type="fullName" class="form-control" id="fullName" placeholder="Full Name"><br>
+        <button type="submit" class="btn btn-success justify-content-md-center">Submit applicaton</button>
+    </form>
+  </div>
+  <script>
+  function confirm(){
+    alert("Please confirm to submit");
+  };
+
+</script>
+</html>

@@ -2,7 +2,11 @@
 <html>
 <head>
   <title>Job Positions | Apply</title>
-  <link rel="import" href="../../headers.html">
+  <script type="text/javascript" src="/lib/js/index.js" /></script>
+  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
+  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
 <body>
   <div class="container-fluid">
@@ -17,7 +21,7 @@
     <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
     </ul>
   </div>
-  <form method="post()" onsubmit="confirm()">
+  <form method="post" onsubmit="confirm()" action="/">
   <div id="applicationForm" class="form-group" hidden>
     <label for="jobID">JOB id</label><br>
     <input name="jobID" disabled id="jobID" value=""></input><br>

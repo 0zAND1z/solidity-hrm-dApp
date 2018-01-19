@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kggp1995/solidity-hrm-dApp#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "bootstrap": "^3.3.7",
     "express": "^4.16.2"
   }

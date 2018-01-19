@@ -2,7 +2,10 @@
 <html>
 <head>
   <title>Dashboard</title>
-  <link rel="import" href="../../headers.html">
+  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
+  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
 <body>
   <div class="container-fluid">
@@ -44,17 +47,20 @@ function confirm(){
   alert("Please confirm to submit");
 };
 
+var path="website/applicant/jobpage.html";
+
+var jobsList = '{ "jobs" : [' +
+'{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
+'{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
+
 function addJobs(){
-  var jobsList = '{ "jobs" : [' +
-  '{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
-  '{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
 
   var parsedJson = JSON.parse(jobsList);
   for(i=0; i < parsedJson.jobs.length ; i++){
     var jobs = document.getElementsByClassName("jobs");
     $("#jobsList").append('<li class="row">' +
     '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
-    '<a class="col-md-4 font-weight-bold" href="'+ parsedJson.jobs[i].jobURL +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
+    '<a class="col-md-4 font-weight-bold" href="' + path + parsedJson.jobs[i].jobURL +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
     '<a class="col-md-4" href="' + parsedJson.jobs[i].jobDescription +'" >  View JD  </div>' +
     '</li>' +
     '<br>');
