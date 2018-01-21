@@ -28,10 +28,10 @@ contract HrmContract {
 
     ApplicantStruct[] applicantsArray;
 
+
     function HrmContract() {
 
     }
-
     //EMPLOYER FUNCTIONS
     function getJobs() returns(JobStruct[] jobArray) {
         return jobsArray;
@@ -46,6 +46,7 @@ contract HrmContract {
         jobpointer = jobpointer + 1;
         return true;
     }
+
 
     function updateJob(string _realJobID, string _newJobID, string _newJobTitle, string _newJobJDLink)
     returns(bool jobUpdateStatus) {
@@ -101,6 +102,7 @@ contract HrmContract {
     function viewJobDetails(string _jobID) returns(string jobID, string jobTitle, string jobJDLink) {
         uint viewJobPointer = jobID_Pointers[_jobID];
 
+
         return (jobsArray[viewJobPointer].jobID,
         jobsArray[viewJobPointer].jobTitle,
         jobsArray[viewJobPointer].jobJDLink);
@@ -110,6 +112,7 @@ contract HrmContract {
         jobID_ApplicantAddress[_jobID].push(msg.sender);
         return true;
     }
+
 
     function setApplicantData(string _firstName, string _middleName, string _lastName,
     string _emailID, string _location, string _mobNo, uint8 _age) returns(bool setStatus) {
@@ -124,4 +127,5 @@ contract HrmContract {
         applicantsArray.push(applicant);
         return true;
     }
+
 }
