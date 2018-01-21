@@ -15,15 +15,22 @@ router.get("/",function(req,res){
   res.sendFile(path + "index.html");
 });
 
+router.get("/viewapplicants.html",function(req,res){
+  res.sendFile(path + "/website/employer/viewapplicants.html");
+});
+
+router.get("/editJob.html", function(req,res){
+  res.sendFile(path + "/website/employer/editJob.html");
+});
+
 router.get("/jobpage.html",function(req,res){
-  console.log(req.query.jobID);
   res.sendFile(path + "/website/applicant/jobpage.html");
 });
 
-router.get("/viewapplicants.html",function(req,res){
-  console.log(req.query.jobID);
-  res.sendFile(path + "/website/employer/viewapplicants.html");
+router.get("/addapplicant.html", function(req,res){
+  res.sendFile(path + "/website/applicant/addapplicant.html");
 });
+
 
 app.use(express.static('.'));
 app.use(express.static('app'));
@@ -70,7 +77,7 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 abi = JSON.parse('[{"constant":false,"inputs":[],"name":"getActiveJobs","outputs":[{"components":[{"name":"jobID","type":"string"},{"name":"jobTitle","type":"string"},{"name":"jobJDLink","type":"string"},{"name":"isJobActive","type":"bool"}],"name":"activeJobArray","type":"tuple[]"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_firstName","type":"string"},{"name":"_middleName","type":"string"},{"name":"_lastName","type":"string"},{"name":"_emailID","type":"string"},{"name":"_location","type":"string"},{"name":"_mobNo","type":"string"},{"name":"_age","type":"uint8"}],"name":"setApplicantData","outputs":[{"name":"setStatus","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_jobID","type":"string"}],"name":"applyJob","outputs":[{"name":"applyStatus","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getJobs","outputs":[{"components":[{"name":"jobID","type":"string"},{"name":"jobTitle","type":"string"},{"name":"jobJDLink","type":"string"},{"name":"isJobActive","type":"bool"}],"name":"jobArray","type":"tuple[]"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getActiveJobArray","outputs":[{"components":[{"name":"jobID","type":"string"},{"name":"jobTitle","type":"string"},{"name":"jobJDLink","type":"string"},{"name":"isJobActive","type":"bool"}],"name":"activeJobArray","type":"tuple[]"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_jobID","type":"string"}],"name":"viewJobDetails","outputs":[{"name":"jobID","type":"string"},{"name":"jobTitle","type":"string"},{"name":"jobJDLink","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_jobID","type":"string"},{"name":"_jobTitle","type":"string"},{"name":"_jobJDLink","type":"string"}],"name":"createJob","outputs":[{"name":"jobCreationStatus","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_realJobID","type":"string"},{"name":"_newJobID","type":"string"},{"name":"_newJobTitle","type":"string"},{"name":"_newJobJDLink","type":"string"}],"name":"updateJob","outputs":[{"name":"jobUpdateStatus","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_jobID","type":"string"},{"name":"_newStatus","type":"bool"}],"name":"setJobStatus","outputs":[{"name":"newJobStatus","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_jobID","type":"string"}],"name":"getApplicants","outputs":[{"components":[{"name":"firstName","type":"string"},{"name":"middleName","type":"string"},{"name":"lastName","type":"string"},{"name":"emailID","type":"string"},{"name":"location","type":"string"},{"name":"mobNo","type":"string"},{"name":"age","type":"uint8"}],"name":"applicantArray","type":"tuple[]"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]');
 
 HrmContract = web3.eth.contract(abi);
-contractInstance = HrmContract.at('0xcab5a7a2f85beebff5207fc9c1b53320d81d33f5');
+contractInstance = HrmContract.at('0x22db93acb75b49d42f69844952185981d9c80db1');
 var addressEmployer = Math.floor(Math.random() * 5);
 var addressCandidate = Math.floor(Math.random() * 5) + 5;
 

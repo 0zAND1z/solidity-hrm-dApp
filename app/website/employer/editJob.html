@@ -2,7 +2,7 @@
 <meta charset="UTF-8">
 <html>
   <head>
-    <title>Applicant List</title>
+    <title>Edit Job | Employer</title>
     <script
   			  src="https://code.jquery.com/jquery-3.2.1.min.js"
   			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -14,9 +14,9 @@
     <link rel="stylesheet" type="text/css" href="/style.css" />
     <script>
       $(document).ready(function(){
-
+        var url = window.location.href;
         var jobID;
-        $.post("http://localhost:3000/parseMyUrl",{url: url}, function(data){
+        $.post("/parseMyUrl",{url: url}, function(data){
           if(data!=null)
           {
             jobID = data;
@@ -24,9 +24,6 @@
             $('#jobID').html(data);
           }
         });
-
-        var applicantArr = getApplicants(jobID);
-        displayApplicants(applicantArr);
       });
 
     </script>
@@ -34,15 +31,15 @@
     </style>
   </head>
   <body>
-    <h1 class="jumbotron" id="jobIDHead">Applicant List</h1>
+    <h1 class="jumbotron" id="jobIDHead">Edit Job</h1>
     <br>
       <div class="container-fluid jumbotron">
         <form method="post" class="form-group" >
-          <input name="jobID" type="text" class="form-control col-sm-5" id="jobID" placeholder="Job ID">
-          <input name="newJobID" type="text" class="form-control col-sm-5" id="jobID" placeholder="Job ID"><br>
+          <input name="jobID" type="text" class="form-control col-sm-5" id="jobID" placeholder="Job ID"><br>
+          <input name="newJobID" type="text" class="form-control col-sm-5" id="jobID" placeholder="New Job ID"><br>
           <input name="jobTitle" type="text" class="form-control col-sm-5" id="jobTitle" placeholder="Job Title"><br>
           <input name="jdLink" type="text" class="form-control col-sm-5" id="jdLink" placeholder="JD Link"><br>
-          <button id="editJobButton" disabled type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Add job</button>
+          <button id="editJobButton" disabled type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Edit job</button>
         </form>
         <div id="jobID" hidden></div>
       </div>
@@ -57,7 +54,7 @@
                <p>Please confirm to edit the job.</p>
              </div>
              <div class="modal-footer">
-               <button type="button" class="btn btn-default" onclick="createNewJob()" data-dismiss="modal">Yes</button>
+               <button type="button" class="btn btn-default" onclick="editJob()" data-dismiss="modal">Yes</button>
                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
              </div>
            </div>
@@ -66,17 +63,21 @@
     <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </body>
   <script>
-  function createNewJob(){
+  function editJob(){
     // var jobID
     var jobID = $('#jobID').val();
     var newJobID = $('#newJobID').val();
     var jobTitle = $('#jobTitle').val();
     var jobJDLink = $('#jdLink').val();
 
-      $.post("http://localhost:3000/createJob",{jobID : jobID, newJobID : newJobID, jobTitle : jobTitle, jobJDLink : jobJDLink}, function(data){
+    if(newJobID == ""){
+      newJobID = jobID;
+    }
+
+      $.post("http://localhost:3000/updateJob",{jobID : jobID, newJobID : newJobID, jobTitle : jobTitle, jobJDLink : jobJDLink}, function(data){
                 if(data==true)
                   {
-                    alert("Created successfully!!");
+                    alert("Job edited!!");
                     window.location.replace("/website/employer/dashboard.html");
                   }
               });
@@ -88,7 +89,7 @@
     var jobTitle = $('#jobTitle').val();
     var jobJDLink = $('#jdLink').val();
 
-    if(jobID == "" || newJobID == "" || jobTitle == "" || jobJDLink == ""){
+    if(jobID == "" || jobTitle == "" || jobJDLink == ""){
       $('#editJobButton').attr("disabled","");
     }else {
       $('#editJobButton').removeAttr("disabled");

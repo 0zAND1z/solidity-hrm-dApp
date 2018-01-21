@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard</title>
+  <title>Dashboard | Applicants</title>
   <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -11,11 +11,18 @@
   <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
   <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
+  <style>
+    #addAppButton{
+      float:right;
+    }
+  </style>
 </head>
 <body>
   <div class="container-fluid">
-    <h1 class="jumbotron">Aicumen Job Positions</h1>
-    <br>
+    <div class="jumbotron">
+    <h1>Aicumen Job Positions</h1>
+    <a id="addAppButton" href="/website/applicant/addapplicant.html" class="col-lg-4 btn btn-success" >Add Your Details</a>
+  </div>
     <ul id="jobsList">
       <li class="row" id="jobsHeader">
         <div class="col-md-4 font-weight-bold">JOB id</div>

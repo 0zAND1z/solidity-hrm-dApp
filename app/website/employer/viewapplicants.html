@@ -14,9 +14,9 @@
     <link rel="stylesheet" type="text/css" href="/style.css" />
     <script>
       $(document).ready(function(){
-
+        var url = window.location.href;
         var jobID;
-        $.post("http://localhost:3000/parseMyUrl",{url: url}, function(data){
+        $.post("/parseMyUrl",{url: url}, function(data){
           if(data!=null)
           {
             jobID = data;
@@ -53,7 +53,7 @@
     '{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
     '{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
 
-    $.post("http://loIDalhost:3000/getApplicants", {jobID : jobID}, function(data){
+    $.post("/getApplicants", {jobID : jobID}, function(data){
       if(data===true)
       {
         alert("jobs found");

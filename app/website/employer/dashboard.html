@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard</title>
+  <title>Dashboard | Employer</title>
   <script
 			  src="https://code.jquery.com/jquery-3.2.1.min.js"
 			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -44,7 +44,7 @@ function refreshJobs(){
   '{ "jobID":"123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : false},' +
   '{ "jobID":"345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : true} ]}';
 
-  $.post("http://localhost:3000/getJobs", function(data){
+  $.post("/getJobs", function(data){
     if(data!=null)
     {
       console.log(data);
@@ -70,8 +70,8 @@ function refreshJobs(){
     $("#jobsList").append('<li class="row ' + liClass + '">' +
     '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
     '<a class="col-md-4 font-weight-bold" href="/viewapplicants.html?jobID=' + parsedJson.jobs[i].jobID + '">' + parsedJson.jobs[i].jobTitle + '</a>' +
-    '<input type="button" onclick="toggleStatus('+parsedJson.jobs[i].jobID +','+parsedJson.jobs[i].isActive+')" class="col-md-2 btn '+ buttonClass + ' statusButton" value="'+ status +'">' +
-    '<input type="button" href="/editJob.html?' + parsedJson.jobs[i].jobID +'" class="col-md-2 btn" value="Edit Job">' +
+    '<input type="button" onclick="toggleStatus('+parsedJson.jobs[i].jobID +','+parsedJson.jobs[i].isActive+')" class="col-md-1 btn '+ buttonClass + ' statusButton" value="'+ status +'">' +
+    '<a href="/editJob.html?jobID=' + parsedJson.jobs[i].jobID +'" class="col-md-1 offset-md-1 btn btn-info">Edit Job</a>' +
     '</li>' +
     '<br>');
   };
@@ -79,7 +79,7 @@ function refreshJobs(){
 
 function toggleStatus(jobID, realStatus){
 
-  $.post("http://localhost:3000/setJobStatus",  {jobID: jobID, newStatus : !realStatus} , function(data){
+  $.post("/setJobStatus",  {jobID: jobID, newStatus : !realStatus} , function(data){
     if(data===true)
     {
       // alert("status set");

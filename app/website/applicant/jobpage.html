@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Job Positions | Apply</title>
+  <title>Apply | Applicants</title>
   <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -52,7 +52,7 @@ $(document).ready(function() {
   var url = window.location.href;
   $('#applyButton').hide();
 
-  $.post("http://localhost:3000/parseMyUrl",{url: url}, function(data){
+  $.post("/parseMyUrl",{url: url}, function(data){
     if(data!=null)
     {
       jobID = data;
@@ -61,7 +61,7 @@ $(document).ready(function() {
     }
   });
 
-  $.post("http://localhost:3000/viewJobDetails",{jobID: jobID}, function(data){
+  $.post("/viewJobDetails",{jobID: jobID}, function(data){
     if(data===true)
     {
       // alert("jobDetails found!!" + jobID);
@@ -73,7 +73,8 @@ $(document).ready(function() {
 
 function apply(){
   var jobID = $('#jobID').html();
-  $.post("http://localhost:3000/applyJob",{jobID: jobID}, function(data){
+
+  $.post("/applyJob",{jobID: jobID}, function(data){
     if(data==true)
     {
       alert("successfully applied!!" + jobID);
