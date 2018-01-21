@@ -2,27 +2,77 @@
 <html>
 <head>
   <title>Add a Job</title>
-  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
-  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <script
+			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			  crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
+  <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
+  <script>
+    $(document).ready(function(){
+    });
+  </script>
+  <style>
+  </style>
 </head>
 <body>
-  <div class="container-fluid">
-    <form method="post" onsubmit="confirm()" class="form-group" >
-        <label for="jobID">JOB id</label><br>
-        <input name="jobID" disabled id="jobID" value=""></input><br>
-        <label for="jobTitle">JOB title</label><br>
-        <input name="" type="email" class="form-control" id="emailAddress" placeholder="Enter email"><br>
-        <label for="fullName">Full Name</label><br>
-        <input name="JDName" type="fullName" class="form-control" id="fullName" placeholder="Full Name"><br>
-        <button type="submit" class="btn btn-success justify-content-md-center">Submit applicaton</button>
+  <h1 class="jumbotron">Add a Job Position</h1>
+  <div class="container-fluid jumbotron">
+    <form method="post" onsubmit="" class="form-group" >
+      <input name="jobID" type="text" class="form-control col-sm-5" id="jobID" placeholder="Job ID"><br>
+      <input name="jobTitle" type="text" class="form-control col-sm-5" id="jobTitle" placeholder="Job Title"><br>
+      <input name="jdLink" type="text" class="form-control col-sm-5" id="jdLink" placeholder="JD Link"><br>
+      <button id="addJobButton" disabled type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Add job</button>
     </form>
   </div>
-  <script>
-  function confirm(){
-    alert("Please confirm to submit");
-  };
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+           <h4 class="modal-title">Create job</h4>
+           <button type="button" class="close" data-dismiss="modal">&times;</button>
+         </div>
+         <div class="modal-body">
+           <p>Please confirm to create the job.</p>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-default" onclick="createNewJob()" data-dismiss="modal">Yes</button>
+           <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+         </div>
+       </div>
+     </div>
+ </div>
+
+<script>
+function createNewJob(){
+  // var jobID
+  var jobID = $('#jobID').val();
+  var jobTitle = $('#jobTitle').val();
+  var jobJDLink = $('#jdLink').val();
+
+    $.post("http://localhost:3000/createJob",{jobID : jobID, jobTitle: jobTitle, jobJDLink : jobJDLink}, function(data){
+              if(data===true)
+                {
+                  alert("Created successfully!!");
+                  window.location.replace("/website/employer/dashboard.html");
+                }
+            });
+}
+
+$('.form-control').bind("keypress", function(){
+  var jobID = $('#jobID').val();
+  var jobTitle = $('#jobTitle').val();
+  var jobJDLink = $('#jdLink').val();
+
+  if(jobID == "" || jobTitle == "" || jobJDLink == ""){
+    $('#addJobButton').attr("disabled","");
+  }else {
+    $('#addJobButton').removeAttr("disabled");
+  }
+});
 
 </script>
 </html>

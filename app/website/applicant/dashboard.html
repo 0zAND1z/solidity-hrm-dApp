@@ -2,9 +2,14 @@
 <html>
 <head>
   <title>Dashboard</title>
-  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
-  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
+  <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
 <body>
@@ -15,23 +20,12 @@
       <li class="row" id="jobsHeader">
         <div class="col-md-4 font-weight-bold">JOB id</div>
         <label class="col-md-4 font-weight-bold">JOB title</label>
-        <label class="col-md-4 font-weight-bold">JOB Description</label>
+        <!-- <label class="col-md-4 font-weight-bold">JOB Description</label> -->
       </li>
     </br>
     <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </ul>
 </div>
-<form method="post()" onsubmit="confirm()">
-  <div id="applicationForm" class="form-group" hidden>
-    <label for="jobID">JOB id</label><br>
-    <input name="jobID" disabled id="jobID" value=""></input><br>
-    <label for="emailAddress">Email address</label><br>
-    <input required name="email" type="email" class="form-control" id="emailAddress" placeholder="Enter email"><br>
-    <label for="fullName">Full Name</label><br>
-    <input required name="fullName" type="fullName" class="form-control" id="fullName" placeholder="Full Name"><br>
-    <!-- <button type="submit" class="btn btn-success">Submit applicaton</button> -->
-  </div>
-</form>
 </body>
 
 <script type="text/javascript">
@@ -50,18 +44,25 @@ function confirm(){
 var path="website/applicant/jobpage.html";
 
 var jobsList = '{ "jobs" : [' +
-'{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
-'{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
+'{ "jobID":"123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
+'{ "jobID":"345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
 
 function addJobs(){
+
+  $.post("http://localhost:3000/getActiveJobs", function(data){
+            if(data===true)
+              {
+                // alert("Added jobs successfully!!");
+                // window.location.replace("/website/employer/dashboard.html");
+              }
+          });
 
   var parsedJson = JSON.parse(jobsList);
   for(i=0; i < parsedJson.jobs.length ; i++){
     var jobs = document.getElementsByClassName("jobs");
     $("#jobsList").append('<li class="row">' +
     '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
-    '<a class="col-md-4 font-weight-bold" href="' + path + parsedJson.jobs[i].jobURL +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
-    '<a class="col-md-4" href="' + parsedJson.jobs[i].jobDescription +'" >  View JD  </div>' +
+    '<a class="col-md-4 font-weight-bold" href="/jobpage.html?jobID=' + parsedJson.jobs[i].jobID +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
     '</li>' +
     '<br>');
   };

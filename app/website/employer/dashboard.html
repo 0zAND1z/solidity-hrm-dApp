@@ -2,26 +2,30 @@
 <html>
 <head>
   <title>Dashboard</title>
-  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
-  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <script
+			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			  crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
+  <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
 <body>
-  <div class="container-fluid">
     <h1 class="jumbotron">Aicumen Job Positions</h1>
     <br>
     <ul id="jobsList">
       <li class="row" id="jobsHeader">
-        <div class="col-md-4 font-weight-bold">JOB id</div>
+        <label class="col-md-4 font-weight-bold">JOB id</label>
         <label class="col-md-4 font-weight-bold">JOB title</label>
-        <label class="col-md-4 font-weight-bold">JOB Description</label>
+        <label class="col-md-4 font-weight-bold">Set Status Options</label>
       </li>
     </br>
     <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </ul>
-  <a id="addNewJob" type="button" class="btn btn-success" href="/website/employer/addnewjob.html">Add a job</a>
-</div>
+</br>
+  <div class="mx-auto div-centered"><a id="addNewJob" type="button" class="btn btn-success" href="/website/employer/addnewjob.html">Create a job opening</a></div>
 </body>
 
 <script type="text/javascript">
@@ -34,24 +38,56 @@ function showApplicationForm(){
   document.getElementByID("jobID").value;
 };
 
-var path="website/applicant/jobpage.html";
-
-var jobsList = '{ "jobs" : [' +
-'{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
-'{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
-
 function refreshJobs(){
+
+  var jobsList = '{ "jobs" : [' +
+  '{ "jobID":"123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : false},' +
+  '{ "jobID":"345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : true} ]}';
+
+  $.post("http://localhost:3000/getJobs", function(data){
+    if(data!=null)
+    {
+      console.log(data);
+      alert("jobs found");
+      // jobsList = data;
+    }
+  });
 
   var parsedJson = JSON.parse(jobsList);
   for(i=0; i < parsedJson.jobs.length ; i++){
     var jobs = document.getElementsByClassName("jobs");
-    $("#jobsList").append('<li class="row">' +
+    var status, buttonClass, liClass;
+    if(parsedJson.jobs[i].isActive){
+      status = "Deactivate";
+      buttonClass = "btn-danger";
+      liClass = "";
+    }else {
+      status = "Activate";
+      buttonClass = "btn-success";
+      liClass = "bg-secondary"
+    }
+
+    $("#jobsList").append('<li class="row ' + liClass + '">' +
     '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
-    '<a class="col-md-4 font-weight-bold" href="' + path + parsedJson.jobs[i].jobURL +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
-    '<a class="col-md-4" href="' + parsedJson.jobs[i].jobDescription +'" >  View JD  </div>' +
+    '<a class="col-md-4 font-weight-bold" href="/viewapplicants.html?jobID=' + parsedJson.jobs[i].jobID + '">' + parsedJson.jobs[i].jobTitle + '</a>' +
+    '<input type="button" onclick="toggleStatus('+parsedJson.jobs[i].jobID +','+parsedJson.jobs[i].isActive+')" class="col-md-2 btn '+ buttonClass + ' statusButton" value="'+ status +'">' +
+    '<input type="button" href="/editJob.html?' + parsedJson.jobs[i].jobID +'" class="col-md-2 btn" value="Edit Job">' +
     '</li>' +
     '<br>');
   };
+}
+
+function toggleStatus(jobID, realStatus){
+
+  $.post("http://localhost:3000/setJobStatus",  {jobID: jobID, newStatus : !realStatus} , function(data){
+    if(data===true)
+    {
+      // alert("status set");
+      // jobsList = data;
+    }
+  });
+  $("#jobsList").html('');
+  refreshJobs();
 }
 
 </script>

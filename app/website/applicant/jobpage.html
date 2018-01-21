@@ -2,47 +2,92 @@
 <html>
 <head>
   <title>Job Positions | Apply</title>
-  <script type="text/javascript" src="/lib/js/index.js" /></script>
-  <script type="text/javascript" src="/lib/js/jquery.min.js" /></script>
-  <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="/lib/css/bootstrap.min.css" />
+  <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
+  <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
 <body>
   <div class="container-fluid">
-    <h1 class="jumbotron">Job Details</h1>
+    <h1 id="jobIDHead" class="jumbotron"></h1>
     <br>
     <ul class="jobs">
       <li class="row">
-          <div class="col-md font-weight-bold">JOB id</div>
-          <label class="col-md font-weight-bold">JOB title</label>
+          <div class="col-md-2 font-weight-bold">JOB id</div>
+          <label class="col-md-2 font-weight-bold">JOB title</label>
       </li>
-    </br>
-    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
     </ul>
+    </br>
+    <h3>Job Brief</h3>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
+    <br>
+    <h3>Job Description</h3>
+    <a href="#">JDLink</a>
+    <br>
+  <br>
+  <div id="jobID" hidden></div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <input type="checkbox" id="checkApply" onclick="showApplyButton(this)" aria-label="Checkbox for following text input">
+        </div>
+      </div>
+    <input type="text" class="form-control col-md-3" disabled value="Please check to confirm your candidature">
+    </div>
+    <input id="applyButton" type="button" class="div-centered btn btn-success" onclick="apply()" value="Apply">
   </div>
   <form method="post" onsubmit="confirm()" action="/">
-  <div id="applicationForm" class="form-group" hidden>
-    <label for="jobID">JOB id</label><br>
-    <input name="jobID" disabled id="jobID" value=""></input><br>
-    <label for="emailAddress">Email address</label><br>
-    <input required name="email" type="email" class="form-control" id="emailAddress" placeholder="Enter email"><br>
-    <label for="fullName">Full Name</label><br>
-    <input required name="fullName" type="fullName" class="form-control" id="fullName" placeholder="Full Name"><br>
-    <!-- <button type="submit" class="btn btn-success">Submit applicaton</button> -->
-  </div>
 </form>
 </body>
 <script type="text/javascript">
-$('document').ready{
 
+$(document).ready(function() {
+  var jobID;
+  var url = window.location.href;
+  $('#applyButton').hide();
+
+  $.post("http://localhost:3000/parseMyUrl",{url: url}, function(data){
+    if(data!=null)
+    {
+      jobID = data;
+      $('#jobIDHead').html("Job Details for Job ID# <b>" + data + "</b>");
+      $('#jobID').html(data);
+    }
+  });
+
+  $.post("http://localhost:3000/viewJobDetails",{jobID: jobID}, function(data){
+    if(data===true)
+    {
+      // alert("jobDetails found!!" + jobID);
+    }
+  });
+
+
+});
+
+function apply(){
+  var jobID = $('#jobID').html();
+  $.post("http://localhost:3000/applyJob",{jobID: jobID}, function(data){
+    if(data==true)
+    {
+      alert("successfully applied!!" + jobID);
+      window.location.replace("/website/applicant/dashboard.html");
+    }
+  });
 }
-  function showApplicationForm(){
-    document.getElementById("applicationForm").removeAttribute("hidden");
-    document.getElementByID("jobID").value;
+
+function showApplyButton(elem){
+  if(elem.checked){
+    $('#applyButton').show();
+  }else{
+    $('#applyButton').hide();
   }
-  function confirm(){
-    alert("Please confirm to submit");
-  }
+}
 </script>
 </html>

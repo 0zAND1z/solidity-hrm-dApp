@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+  <head>
+    <title>Applicant List</title>
+    <script
+  			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  			  crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <script>
+      $(document).ready(function(){
+
+        var jobID;
+        $.post("http://localhost:3000/parseMyUrl",{url: url}, function(data){
+          if(data!=null)
+          {
+            jobID = data;
+            $('#jobIDHead').html("Applicants for Job ID# <b>" + data + "</b>");
+            $('#jobID').html(data);
+          }
+        });
+
+        var applicantArr = getApplicants(jobID);
+        displayApplicants(applicantArr);
+      });
+
+    </script>
+    <style>
+    </style>
+  </head>
+  <body>
+    <h1 class="jumbotron" id="jobIDHead">Applicant List</h1>
+    <br>
+    <ul id="jobsList">
+      <li class="row" id="jobsHeader">
+        <div class="col-md-4 font-weight-bold">JOB id</div>
+        <label class="col-md-4 font-weight-bold">JOB title</label>
+        <label class="col-md-4 font-weight-bold">JOB Description</label>
+      </li>
+    </br>
+    <div id="jobID" hidden></div>
+    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
+  </ul>
+  </body>
+  <script>
+  function getApplicants(jobID){
+    var applicantList = '{ "jobs" : [' +
+    '{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
+    '{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
+
+    $.post("http://loIDalhost:3000/getApplicants", {jobID : jobID}, function(data){
+      if(data===true)
+      {
+        alert("jobs found");
+        // jobsList = data;
+      }
+    });
+
+    // var applicantList = getApplicants(jobID);
+
+    var parsedJson = JSON.parse(applicantList);
+    for(i=0; i < parsedJson.jobs.length ; i++){
+      var jobs = document.getElementsByClassName("jobs");
+      $("#applicantsList").append('<li class="row">' +
+      '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
+      '<a class="col-md-4 font-weight-bold" href="/website/employer/viewapplicants.html/"' + parsedJson.jobs[i].jobID + '>' + parsedJson.jobs[i].jobTitle + '</div>' +
+      '<a class="col-md-4" href="' + parsedJson.jobs[i].jobDescription +'" >  View JD  </div>' +
+      '</li>' +
+      '<br>');
+    };
+  }
+  </script>
+</html>
