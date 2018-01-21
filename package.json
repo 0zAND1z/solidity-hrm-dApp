@@ -19,6 +19,11 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "bootstrap": "^3.3.7",
-    "express": "^4.16.2"
+    "commonjs": "0.0.1",
+    "express": "^4.16.2",
+    "requirejs": "^2.3.5",
+    "solc": "^0.4.19",
+    "uniq": "^1.0.1",
+    "web3": "^0.20.4"
   }
 }
