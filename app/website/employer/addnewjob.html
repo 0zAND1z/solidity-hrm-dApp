@@ -53,7 +53,7 @@ function createNewJob(){
   var jobTitle = $('#jobTitle').val();
   var jobJDLink = $('#jdLink').val();
 
-    $.post("http://localhost:3000/createJob",{jobID : jobID, jobTitle: jobTitle, jobJDLink : jobJDLink}, function(data){
+    $.post("/createJob",{jobID : jobID, jobTitle: jobTitle, jobJDLink : jobJDLink}, function(data){
               if(data===true)
                 {
                   alert("Created successfully!!");

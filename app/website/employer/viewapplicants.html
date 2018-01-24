@@ -15,7 +15,10 @@
     <script>
       $(document).ready(function(){
         var url = window.location.href;
-        var jobID;
+        var jobID ="";
+        var arrApplicantNo = new Array();
+        var applicantList = new Array();
+
         $.post("/parseMyUrl",{url: url}, function(data){
           if(data!=null)
           {
@@ -25,54 +28,91 @@
           }
         });
 
-        var applicantArr = getApplicants(jobID);
-        displayApplicants(applicantArr);
-      });
 
+        // jobID = $('#jobID').html().toString();
+      setTimeout(function(){
+        console.log(jobID);
+        $.post("/getApplicants", {jobID:jobID}, function(data){
+          if(data!=null)
+          {
+            arrApplicantNo = data;
+            console.log(data);
+          }
+        });
+      }, 200);
+
+        setTimeout(function(){
+          console.log(arrApplicantNo);
+          for(var i = 0; i < arrApplicantNo.length; i++){
+            $.post("/getApplFromApplNo", {jobNo:arrApplicantNo[i]}, function(data){
+              appList[i] = new Array();
+              if(data!=null){
+                console.log(data);
+                appList[i] = data;
+                // console.log(appList[i][2]);
+
+                $("#applicantsList").append('<li class="row">' +
+                '<div class="col-md-2">' + jobsList[i][1] + '</div>' +
+                '<div class="col-md-2">' + jobsList[i][2] + '</div>' +
+                '<div class="col-md-2">' + jobsList[i][3] + '</div>' +
+                '<div class="col-md-2">' + jobsList[i][4] + '</div>' +
+                '<div class="col-md-1">' + jobsList[i][5] + '</div>' +
+                '<div class="col-md-1">' + jobsList[i][6] + '</div>' +
+                '<div class="col-md-2">' + jobsList[i][7] + '</div>' +
+                '</li>' +
+                '<br>');
+            }
+          });
+        }
+      }, 500);
+        // } 300);
+        // var applicantList = '{ "applicants" : [' +
+        // '{ "fname":"Kaby" , "mname":"Broadwell", "lname":"Lake", "email":"testemail1@test.net", "location": "NY", "mobno":"12312XXXX1", "dob":"19 Nov, 1977"},' +
+        // '{ "fname":"Coffee" , "mname":"Haswell", "lname":"Lake", "email":"testemail2@test.net", "location": "Bengaluru", "mobno":"86412XXXX1", "dob":"22 Mar 1970"} ]}';
+        //
+        //
+        // // var applicantList = getApplicants(jobID);
+        //
+        // var parsedJson = JSON.parse(applicantList);
+        // for(i=0; i < parsedJson.applicants.length ; i++){
+        //   $("#applicantsList").append('<li class="row">' +
+        //   '<div class="col-md-2">' + parsedJson.applicants[i].fname + '</div>' +
+        //   '<div class="col-md-2">' + parsedJson.applicants[i].mname + '</div>' +
+        //   '<div class="col-md-2">' + parsedJson.applicants[i].lname + '</div>' +
+        //   '<div class="col-md-2">' + parsedJson.applicants[i].email + '</div>' +
+        //   '<div class="col-md-1">' + parsedJson.applicants[i].location + '</div>' +
+        //   '<div class="col-md-1">' + parsedJson.applicants[i].mobno + '</div>' +
+        //   '<div class="col-md-2">' + parsedJson.applicants[i].dob + '</div>' +
+        //   '</li>' +
+        //   '<br>');
+        // };
+      });
     </script>
     <style>
     </style>
   </head>
   <body>
     <h1 class="jumbotron" id="jobIDHead">Applicant List</h1>
-    <br>
-    <ul id="jobsList">
-      <li class="row" id="jobsHeader">
-        <div class="col-md-4 font-weight-bold">JOB id</div>
-        <label class="col-md-4 font-weight-bold">JOB title</label>
-        <label class="col-md-4 font-weight-bold">JOB Description</label>
+  <br>
+    <ul>
+      <li class="row">
+        <label class="col-md-2 font-weight-bold">First Name</label>
+        <label class="col-md-2 font-weight-bold">Middle Name</label>
+        <label class="col-md-2 font-weight-bold">Last Name</label>
+        <label class="col-md-2 font-weight-bold">Email ID</label>
+        <label class="col-md-1 font-weight-bold">Current location</label>
+        <label class="col-md-1 font-weight-bold">Contact no.</label>
+        <label class="col-md-2 font-weight-bold">DOB</label>
       </li>
+      <div id="applicantsList">
+      </div>
     </br>
     <div id="jobID" hidden></div>
     <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </ul>
   </body>
   <script>
-  function getApplicants(jobID){
-    var applicantList = '{ "jobs" : [' +
-    '{ "jobID":"#123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
-    '{ "jobID":"#345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
 
-    $.post("/getApplicants", {jobID : jobID}, function(data){
-      if(data===true)
-      {
-        alert("jobs found");
-        // jobsList = data;
-      }
-    });
 
-    // var applicantList = getApplicants(jobID);
-
-    var parsedJson = JSON.parse(applicantList);
-    for(i=0; i < parsedJson.jobs.length ; i++){
-      var jobs = document.getElementsByClassName("jobs");
-      $("#applicantsList").append('<li class="row">' +
-      '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
-      '<a class="col-md-4 font-weight-bold" href="/website/employer/viewapplicants.html/"' + parsedJson.jobs[i].jobID + '>' + parsedJson.jobs[i].jobTitle + '</div>' +
-      '<a class="col-md-4" href="' + parsedJson.jobs[i].jobDescription +'" >  View JD  </div>' +
-      '</li>' +
-      '<br>');
-    };
-  }
   </script>
 </html>

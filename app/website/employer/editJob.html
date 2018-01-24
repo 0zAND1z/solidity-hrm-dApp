@@ -20,8 +20,8 @@
           if(data!=null)
           {
             jobID = data;
-            $('#jobIDHead').html("Edit Details for Job ID# <b>" + data + "</b>");
-            $('#jobID').html(data);
+            $('#jobIDHead').html("Edit Details for Job ID# <b>" + jobID + "</b>");
+            $('#jobID').attr("value", jobID);
           }
         });
       });
@@ -35,8 +35,8 @@
     <br>
       <div class="container-fluid jumbotron">
         <form method="post" class="form-group" >
-          <input name="jobID" type="text" class="form-control col-sm-5" id="jobID" placeholder="Job ID"><br>
-          <input name="newJobID" type="text" class="form-control col-sm-5" id="jobID" placeholder="New Job ID"><br>
+          <input name="jobID" disabled type="text" class="form-control col-sm-5" id="jobID" value="" placeholder="Job ID"><br>
+          <input name="newJobID" type="text" class="form-control col-sm-5" id="newJobID" placeholder="New Job ID"><br>
           <input name="jobTitle" type="text" class="form-control col-sm-5" id="jobTitle" placeholder="Job Title"><br>
           <input name="jdLink" type="text" class="form-control col-sm-5" id="jdLink" placeholder="JD Link"><br>
           <button id="editJobButton" disabled type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Edit job</button>
@@ -74,7 +74,7 @@
       newJobID = jobID;
     }
 
-      $.post("http://localhost:3000/updateJob",{jobID : jobID, newJobID : newJobID, jobTitle : jobTitle, jobJDLink : jobJDLink}, function(data){
+      $.post("/updateJob",{jobID : jobID, newJobID : newJobID, newJobTitle : jobTitle, newJobJDLink : jobJDLink}, function(data){
                 if(data==true)
                   {
                     alert("Job edited!!");

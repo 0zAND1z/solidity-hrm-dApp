@@ -1,12 +1,17 @@
-pragma solidity ^0.4.18;
-
+pragma solidity ^0.4.19;
 
 contract HrmContract {
-    mapping(string => uint) jobID_Pointers;
-    mapping(string => address[]) jobID_ApplicantAddress;
-    mapping(address => ApplicantStruct) address_ApplicantStruct;
+
+    mapping (address => JobStruct) employerAddr_jobStruct;
+    mapping (address => ApplicantStruct) applicantAddr_applicantStruct;
+    mapping (address => uint[]) employerAddr_jobNo;
+    mapping (address => uint) applicantAddr_applicantNo;
+    mapping (uint => uint[]) jobNo_applicantNo;
+    mapping (string => uint) jobID_jobNo;
+    mapping (bool => uint[]) isJobActive_jobNo;
 
     struct JobStruct {
+        uint jobNo;
         string jobID;
         string jobTitle;
         string jobJDLink;
@@ -14,117 +19,109 @@ contract HrmContract {
     }
 
     struct ApplicantStruct {
-        string firstName;
-        string middleName;
-        string lastName;
-        string emailID;
+        uint applicantNo;
+        string fname;
+        string mname;
+        string lname;
+        string email;
         string location;
         string mobNo;
-        uint8 age;
+        string dob;
     }
 
-    JobStruct[] jobsArray;
-    uint jobpointer = 0;
+    JobStruct[] jobArray;
+    ApplicantStruct[] applicantArray;
+    uint jobNo;
+    uint applicantNo;
 
-    ApplicantStruct[] applicantsArray;
-
-
-    function HrmContract() {
+    function HrmContract() public {
 
     }
-    //EMPLOYER FUNCTIONS
-    function getJobs() returns(JobStruct[] jobArray) {
-        return jobsArray;
-    }
 
-    function createJob(string _jobID, string _jobTitle, string _jobJDLink) returns(bool jobCreationStatus) {
-        jobsArray[jobpointer].jobID = _jobID;
-        jobsArray[jobpointer].jobTitle = _jobTitle;
-        jobsArray[jobpointer].jobJDLink = _jobJDLink;
-        jobsArray[jobpointer].isJobActive = true;
-        jobID_Pointers[_jobID] = jobpointer;
-        jobpointer = jobpointer + 1;
+    function createJob(string _jobID, string _jobTitle, string _jobJDLink)  returns (bool) {
+        JobStruct newJob = employerAddr_jobStruct[msg.sender];
+        employerAddr_jobNo[msg.sender].push(jobNo);
+        isJobActive_jobNo[true].push(jobNo);
+        newJob.jobNo = jobNo;
+        newJob.jobID = _jobID;
+        newJob.jobTitle = _jobTitle;
+        newJob.jobJDLink = _jobJDLink;
+        newJob.isJobActive = true;
+        jobArray.push(newJob);
+        jobNo = jobNo + 1;
         return true;
     }
 
-
-    function updateJob(string _realJobID, string _newJobID, string _newJobTitle, string _newJobJDLink)
-    returns(bool jobUpdateStatus) {
-        uint editJobPointer = jobID_Pointers[_realJobID];
-        bytes memory jobIDTestString = bytes(_newJobID);
-        bytes memory jobTitleTestString = bytes(_newJobID);
-        bytes memory jobJDTestString = bytes(_newJobID);
-        if (jobIDTestString.length != 0) {
-            jobsArray[editJobPointer].jobID = _newJobID;
-        }
-        if (jobTitleTestString.length != 0) {
-            jobsArray[editJobPointer].jobTitle = _newJobTitle;
-        }
-        if (jobJDTestString.length != 0) {
-            jobsArray[editJobPointer].jobJDLink = _newJobJDLink;
-        }
-    }
-
-    function setJobStatus(string _jobID, bool _newStatus) returns(bool newJobStatus) {
-        uint statusJobPointer = jobID_Pointers[_jobID];
-        jobsArray[statusJobPointer].isJobActive = _newStatus;
-        assert(jobsArray[statusJobPointer].isJobActive == _newStatus);
-        return jobsArray[statusJobPointer].isJobActive;
-    }
-
-    function getApplicants(string _jobID) returns(ApplicantStruct[] applicantArray) {
-        address[] jobApplicantsArray = jobID_ApplicantAddress[_jobID];
-        ApplicantStruct[] applicantStructArray;
-        for (uint i = 0; i < jobApplicantsArray.length; i++) {
-            ApplicantStruct applicant = address_ApplicantStruct[jobApplicantsArray[i]];
-            applicantStructArray.push(applicant);
-        }
-        return applicantStructArray;
-    }
-
-
-    //APPLICANT FUNCTIONS
-    //getActiveJobs() returns an array of active jobs
-    function getActiveJobs() returns(JobStruct[] activeJobArray) {
-        return getActiveJobArray();
-    }
-
-    function getActiveJobArray() returns(JobStruct[] activeJobArray) {
-        JobStruct[] activeJobsArray;
-        for (uint i = 0; i < jobsArray.length; i++) {
-            if (jobsArray[i].isJobActive == true) {
-                activeJobsArray.push(jobsArray[i]);
-            }
-        }
-        return activeJobsArray;
-    }
-
-    function viewJobDetails(string _jobID) returns(string jobID, string jobTitle, string jobJDLink) {
-        uint viewJobPointer = jobID_Pointers[_jobID];
-
-
-        return (jobsArray[viewJobPointer].jobID,
-        jobsArray[viewJobPointer].jobTitle,
-        jobsArray[viewJobPointer].jobJDLink);
-    }
-
-    function applyJob(string _jobID) returns(bool applyStatus) {
-        jobID_ApplicantAddress[_jobID].push(msg.sender);
+    function updateJob(string _realJobID, string _newJobID, string _newJobTitle, string _newJobJDLink)  returns (bool jobUpdateStatus) {
+        uint reqJobNo = jobID_jobNo[_realJobID];
+        jobArray[reqJobNo].jobID = _newJobID;
+        jobArray[reqJobNo].jobTitle = _newJobTitle;
+        jobArray[reqJobNo].jobJDLink = _newJobJDLink;
         return true;
     }
 
+    function getJobs() returns (uint[] jobNoArray) {
+        return(employerAddr_jobNo[msg.sender]);
+    }
 
-    function setApplicantData(string _firstName, string _middleName, string _lastName,
-    string _emailID, string _location, string _mobNo, uint8 _age) returns(bool setStatus) {
-        var applicant = address_ApplicantStruct[msg.sender];
-        applicant.firstName = _firstName;
-        applicant.middleName = _middleName;
-        applicant.lastName = _lastName;
-        applicant.emailID = _emailID;
-        applicant.location = _location;
-        applicant.mobNo = _mobNo;
-        applicant.age = _age;
-        applicantsArray.push(applicant);
+    function getActiveJobs() returns (uint[] jobNoArray) {
+        return(isJobActive_jobNo[true]);
+    }
+
+    function getJobsFromJobNo(uint _jobNo) returns (uint ret_jobNo, string ret_jobID, string ret_jobTitle, string ret_jobJDLink) {
+        if(jobNo != 0){
+            return(jobArray[_jobNo].jobNo, jobArray[_jobNo].jobID, jobArray[_jobNo].jobTitle, jobArray[_jobNo].jobJDLink);
+        }else{
+            return;
+        }
+    }
+
+    function getApplicants(string _jobID)  returns (uint[] applicantNoArray) {
+        uint reqJobNo = jobID_jobNo[_jobID];
+        return(jobNo_applicantNo[reqJobNo]);
+    }
+
+    function getApplFromApplNo(uint _applicantNo)  returns (string ret_fname, string ret_mname, string ret_lname,
+    string ret_email, string ret_location, string ret_mobNo, string ret_dob){
+        return(applicantArray[_applicantNo].fname, applicantArray[_applicantNo].mname, applicantArray[_applicantNo].lname,
+        applicantArray[_applicantNo].email, applicantArray[_applicantNo].location, applicantArray[_applicantNo].mobNo, applicantArray[_applicantNo].dob);
+    }
+
+    function setJobStatus(string _jobID, bool _isJobActive)  returns (bool retSetJobStatus) {
+        uint reqJobNo = jobID_jobNo[_jobID];
+        jobArray[reqJobNo].isJobActive = _isJobActive;
+        isJobActive_jobNo[_isJobActive].push(reqJobNo);
+    }
+
+    function setApplicantData(string _fname, string _mname, string _lname,
+    string _email, string _location, string _mobNo, string _dob)  returns (bool setApplicantStatus) {
+        ApplicantStruct newApplicant = applicantAddr_applicantStruct[msg.sender];
+        applicantAddr_applicantNo[msg.sender] = applicantNo;
+        newApplicant.applicantNo = applicantNo;
+        newApplicant.fname = _fname;
+        newApplicant.mname = _mname;
+        newApplicant.lname = _lname;
+        newApplicant.email = _email;
+        newApplicant.location = _location;
+        newApplicant.mobNo = _mobNo;
+        newApplicant.dob = _dob;
+        applicantArray.push(newApplicant);
+        applicantNo = applicantNo + 1;
+        return true;
+    }
+
+    function viewJobDetails(string _jobID)  returns (uint ret_jobNo, string ret_jobID, string ret_jobTitle, string ret_jobJDLink) {
+        uint reqJobNo = jobID_jobNo[_jobID];
+        ret_jobID = jobArray[reqJobNo].jobID;
+        ret_jobTitle = jobArray[reqJobNo].jobTitle;
+        ret_jobJDLink = jobArray[reqJobNo].jobJDLink;
+        ret_jobNo = reqJobNo;
+        return(ret_jobNo, ret_jobID, ret_jobTitle, ret_jobJDLink);
+    }
+
+    function applyJob(string _jobID)  returns (bool applyJobStatus) {
+        uint reqJobNo = jobID_jobNo[_jobID];
+        jobNo_applicantNo[reqJobNo].push(applicantAddr_applicantNo[msg.sender]);
         return true;
     }
 

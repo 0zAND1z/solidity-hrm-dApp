@@ -31,7 +31,7 @@
           <input name="email" type="text" class="form-control col-sm-5" id="email" placeholder="Email ID"><br>
           <input name="location" type="text" class="form-control col-sm-5" id="location" placeholder="Current Location"><br>
           <input name="mobNo" type="text" class="form-control col-sm-5" id="mobNo" placeholder="Mobile No."><br>
-          <input name="age" type="text" class="form-control col-sm-5" id="age" placeholder="Age"><br>
+          <input name="dob" type="text" class="form-control col-sm-5" id="dob" placeholder="dob"><br>
           <button id="addAppButton" disabled type="button" onclick="addApplicant()" class="btn btn-success" >Add Your Details</button>
         </form>
       </div>
@@ -46,10 +46,10 @@
     var email = $('#email').val();
     var location = $('#location').val();
     var mobNo = $('#mobNo').val();
-    var age = $('#age').val();
+    var dob = $('#dob').val();
 
       $.post("/setApplicantData",{fName : fName, mName : mName, lName : lName,
-        email : email, location: location, age: age}, function(data){
+        email : email, mobNo: mobNo, location: location, dob: dob}, function(data){
                 if(data==true)
                   {
                     alert("Applicant added!!");
