@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.18;
 
 contract HrmContract {
 
@@ -8,7 +8,7 @@ contract HrmContract {
     mapping (address => uint) applicantAddr_applicantNo;
     mapping (uint => uint[]) jobNo_applicantNo;
     mapping (string => uint) jobID_jobNo;
-    mapping (bool => uint[]) isJobActive_jobNo;
+    mapping (uint => bool) jobNo_isJobActive;
 
     struct JobStruct {
         uint jobNo;
@@ -41,7 +41,8 @@ contract HrmContract {
     function createJob(string _jobID, string _jobTitle, string _jobJDLink)  returns (bool) {
         JobStruct newJob = employerAddr_jobStruct[msg.sender];
         employerAddr_jobNo[msg.sender].push(jobNo);
-        isJobActive_jobNo[true].push(jobNo);
+        jobID_jobNo[_jobID] = jobNo;
+        jobNo_isJobActive[jobNo] = true;
         newJob.jobNo = jobNo;
         newJob.jobID = _jobID;
         newJob.jobTitle = _jobTitle;
@@ -65,7 +66,13 @@ contract HrmContract {
     }
 
     function getActiveJobs() returns (uint[] jobNoArray) {
-        return(isJobActive_jobNo[true]);
+        uint[] retJobNoArray;
+        for(uint i = 0; i < jobArray.length; i++){
+            if(jobNo_isJobActive[jobArray[i].jobNo] == true){
+                retJobNoArray.push(jobArray[i].jobNo);
+            }
+        }
+        return retJobNoArray;
     }
 
     function getJobsFromJobNo(uint _jobNo) returns (uint ret_jobNo, string ret_jobID, string ret_jobTitle, string ret_jobJDLink) {
@@ -78,7 +85,12 @@ contract HrmContract {
 
     function getApplicants(string _jobID)  returns (uint[] applicantNoArray) {
         uint reqJobNo = jobID_jobNo[_jobID];
-        return(jobNo_applicantNo[reqJobNo]);
+        uint[] ret_applicantNoArray;
+        for(uint i = 0; i < employerAddr_jobNo[msg.sender].length; i++){
+            if(employerAddr_jobNo[msg.sender][i] == reqJobNo){
+                return(jobNo_applicantNo[reqJobNo]);
+            }
+        }
     }
 
     function getApplFromApplNo(uint _applicantNo)  returns (string ret_fname, string ret_mname, string ret_lname,
@@ -90,7 +102,8 @@ contract HrmContract {
     function setJobStatus(string _jobID, bool _isJobActive)  returns (bool retSetJobStatus) {
         uint reqJobNo = jobID_jobNo[_jobID];
         jobArray[reqJobNo].isJobActive = _isJobActive;
-        isJobActive_jobNo[_isJobActive].push(reqJobNo);
+        jobNo_isJobActive[reqJobNo] = _isJobActive;
+        return true;
     }
 
     function setApplicantData(string _fname, string _mname, string _lname,
@@ -116,12 +129,13 @@ contract HrmContract {
         ret_jobTitle = jobArray[reqJobNo].jobTitle;
         ret_jobJDLink = jobArray[reqJobNo].jobJDLink;
         ret_jobNo = reqJobNo;
-        return(ret_jobNo, ret_jobID, ret_jobTitle, ret_jobJDLink);
+        return(ret_jobNo, _jobID, ret_jobTitle, ret_jobJDLink);
     }
 
     function applyJob(string _jobID)  returns (bool applyJobStatus) {
         uint reqJobNo = jobID_jobNo[_jobID];
         jobNo_applicantNo[reqJobNo].push(applicantAddr_applicantNo[msg.sender]);
+
         return true;
     }
 

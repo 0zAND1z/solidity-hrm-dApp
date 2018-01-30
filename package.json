@@ -21,9 +21,12 @@
     "bootstrap": "^3.3.7",
     "commonjs": "0.0.1",
     "express": "^4.16.2",
+    "jquery": "^3.3.1",
+    "jsdom": "^11.6.1",
     "requirejs": "^2.3.5",
     "solc": "^0.4.19",
     "truffle": "^4.0.5",
+    "truffle-contract": "^3.0.2",
     "uniq": "^1.0.1",
     "web3": "^0.20.4"
   }
