@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+  <head>
+    <title>Add Candidate | Applicants</title>
+    <script
+  			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  			  crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <script>
+      $(document).ready(function(){
+      });
+
+    </script>
+    <style>
+    </style>
+  </head>
+  <body>
+    <h1 class="jumbotron" id="jobIDHead">Edit Job</h1>
+    <br>
+      <div class="container-fluid jumbotron">
+        <form method="post" class="form-group" action="/">
+          <input name="fName" type="text" class="form-control col-sm-5" id="fName" placeholder="First Name"><br>
+          <input name="mName" type="text" class="form-control col-sm-5" id="mName" placeholder="Middle Name"><br>
+          <input name="lName" type="text" class="form-control col-sm-5" id="lName" placeholder="Last Name"><br>
+          <input name="email" type="text" class="form-control col-sm-5" id="email" placeholder="Email ID"><br>
+          <input name="location" type="text" class="form-control col-sm-5" id="location" placeholder="Current Location"><br>
+          <input name="mobNo" type="text" class="form-control col-sm-5" id="mobNo" placeholder="Mobile No."><br>
+          <input name="dob" type="text" class="form-control col-sm-5" id="dob" placeholder="dob"><br>
+          <button id="addAppButton" disabled type="button" onclick="addApplicant()" class="btn btn-success" >Add Your Details</button>
+        </form>
+      </div>
+    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
+  </body>
+  <script>
+  function addApplicant(){
+    // var jobID
+    var fName = $('#fName').val();
+    var mName = $('#mName').val();
+    var lName = $('#lName').val();
+    var email = $('#email').val();
+    var location = $('#location').val();
+    var mobNo = $('#mobNo').val();
+    var dob = $('#dob').val();
+
+      $.post("/setApplicantData",{fName : fName, mName : mName, lName : lName,
+        email : email, mobNo: mobNo, location: location, dob: dob}, function(data){
+                if(data==true)
+                  {
+                    alert("Applicant added!!");
+                    window.location.replace("/website/applicant/dashboard.html");
+                  }
+              });
+  }
+
+  $('.form-control').bind("keypress", function(){
+    var fName = $('#fName').val();
+    var mName = $('#mName').val();
+    var lName = $('#lName').val();
+    var email = $('#email').val();
+    var location = $('#location').val();
+    var mobNo = $('#mobNo').val();
+    var age = $('#age').val();
+
+    if(fName == "" || mName == "" || lName == "" || email == "" || location == "" || mobNo == "" || age == ""){
+      $('#addAppButton').attr("disabled","");
+    }else {
+      $('#addAppButton').removeAttr("disabled");
+    }
+  });
+
+  </script>
+</html>
