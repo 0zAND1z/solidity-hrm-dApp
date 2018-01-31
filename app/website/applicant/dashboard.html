@@ -8,7 +8,6 @@
         crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
   <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
   <style>
@@ -27,10 +26,8 @@
       <li class="row" id="jobsHeader">
         <div class="col-md-4 font-weight-bold">JOB id</div>
         <label class="col-md-4 font-weight-bold">JOB title</label>
-        <!-- <label class="col-md-4 font-weight-bold">JOB Description</label> -->
       </li>
     </br>
-    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </ul>
 </div>
 </body>
@@ -51,32 +48,10 @@ function confirm(){
 var path="website/applicant/jobpage.html";
 
 function addJobs(){
-
-  // $.post("/getActiveJobs", function(data){
-  //           if(data===true)
-  //             {
-  //               // alert("Added jobs successfully!!");
-  //               // window.location.replace("/website/employer/dashboard.html");
-  //             }
-  //         });
-  //
-  // var parsedJson = JSON.parse(jobsList);
-  // for(i=0; i < parsedJson.jobs.length ; i++){
-  //   var jobs = document.getElementsByClassName("jobs");
-  //   $("#jobsList").append('<li class="row">' +
-  //   '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
-  //   '<a class="col-md-4 font-weight-bold" href="/jobpage.html?jobID=' + parsedJson.jobs[i].jobID +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
-  //   '</li>' +
-  //   '<br>');
-  // };
-
   var arrJobNo = new Array();
   var jobsList = new Array();
-  // var jobsList = '{ "jobs" : [' +
-  // '{ "jobID":"123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : false},' +
-  // '{ "jobID":"345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : true} ]}';
 
-  $.post("/getJobs", function(data){
+  $.post("/getActiveJobs", function(data){
     if(data!=null)
     {
       arrJobNo = data;
@@ -92,44 +67,27 @@ function addJobs(){
         jobsList[i] = new Array();
         if(data!=null)
         {
-          // console.log(data);
           jobsList[i] = data;
           console.log(jobsList[i][2]);
           $("#jobsList").append('<li class="row ' + '">' +
           '<div class="col-md-4">' + jobsList[i][1] + '</div>' +
           '<a class="col-md-4 font-weight-bold" href="/jobpage.html?jobID=' + jobsList[i][1] + '">' + jobsList[i][2] + '</a>' +
-          // '<input type="button" onclick="toggleStatus('+parsedJson.jobs[i].jobID +','+parsedJson.jobs[i].isActive+')" class="col-md-1 btn '+ buttonClass + ' statusButton" value="'+ status +'">' +
           '</li>' +
           '<br>');
         }
       });
     }
   }, 400);
-  // var parsedJson = JSON.parse(jobsList);
 
     for(i=0; i < arrJobNo.length ; i++){
       console.log(jobsList[i]);
-
+      
       var jobs = document.getElementsByClassName("jobs");
-
-      // var status, buttonClass, liClass;
-      // if(parsedJson.jobs[i].isActive){
-      //   status = "Deactivate";
-      //   buttonClass = "btn-danger";
-      //   liClass = "";
-      // }else {
-      //   status = "Activate";
-      //   buttonClass = "btn-success";
-      //   liClass = "bg-secondary"
-      // }
-
       var jobID = jobsList[0];
-
 
       $("#jobsList").append('<li class="row ' + '">' +
       '<div class="col-md-4">' + jobID + '</div>' +
       '<a class="col-md-4 font-weight-bold" href="/viewapplicants.html?jobID=' + parsedJson.jobs[i].jobID + '">' + parsedJson.jobs[i].jobTitle + '</a>' +
-      // '<input type="button" onclick="toggleStatus('+parsedJson.jobs[i].jobID +','+parsedJson.jobs[i].isActive+')" class="col-md-1 btn '+ buttonClass + ' statusButton" value="'+ status +'">' +
       '<a href="/editJob.html?jobID=' + parsedJson.jobs[i].jobID +'" class="col-md-1 offset-md-1 btn btn-info">Edit Job</a>' +
       '</li>' +
       '<br>');

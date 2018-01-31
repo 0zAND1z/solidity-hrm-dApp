@@ -8,7 +8,6 @@
   crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
   <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
@@ -62,12 +61,11 @@ $(document).ready(function() {
   });
 
   setTimeout(function(){
-    jobID = $('#jobID').html(data);
+    jobID = $('#jobID').html();
     $.post("/viewJobDetails",{jobID: jobID}, function(data){
       if(data===true)
       {
         $('#jobID').html(jobID);
-        // alert("jobDetails found!!" + jobID);
       }
     });
   }, 500);

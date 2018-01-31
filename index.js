@@ -89,106 +89,228 @@ var contents = fs.readFileSync("build/contracts/HrmContract.json");
 
 var HrmArtifact = JSON.parse(contents);
 
-console.log(HrmArtifact);
+const HrmContract = TruffleContract(HrmArtifact);
+HrmContract.setProvider(web3.currentProvider);
 
-HrmContract = TruffleContract(HrmArtifact);
-HrmContract.setProvider(web3);
-
-contractInstance = HrmContract.deployed().then(function(instance) {
-  adoptionInstance = instance;
-  return instace;
-});
-
-console.log(contractInstance);
+// contractInstance = HrmContract.deployed().then(function(error, instance) {
+// if (error) {
+//   console.log(error);
+// }
+//   return instace;
+// });
 
 //Employer actions
+
 app.post('/createJob',function(req,res){
-  console.log(req.body.jobID);
-  var returnVal = contractInstance.createJob(req.body.jobID, req.body.jobTitle, req.body.jobJDLink, {from: web3.eth.accounts[5], gas:100000});
-  console.log(returnVal);
-  res.send(returnVal);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[1];
+    HrmContract.deployed().then(function(instance) {
+      return instance.createJob(req.body.jobID, req.body.jobTitle, req.body.jobJDLink, {from: account, gas:59999999});
+    }).then(function(result) {
+      if(result.receipt.status ==1){
+        res.send(true);
+      }
+    }).catch(function(err) {
+      console.log(err.message);
+      res.send(false);
+    });
+  });
   // res.send(true);
 });
 
-app.post('/getJobs',function(req,res){
-  var returnVal = contractInstance.getJobs.call({from: web3.eth.accounts[5]});
-  console.log(returnVal);
+app.post('/getJobs', function(req,res){
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[1];
+    HrmContract.deployed().then(function(instance) {
+      return instance.getJobs.call({from: account});
+    }).then(function(result) {
+      console.log(result);
+      res.send(result);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
   // res.send(returnVal);
-  res.send(returnVal);
 });
 
 app.post('/getJobsFromJobNo', function(req,res){
-  var returnVal = contractInstance.getJobsFromJobNo.call(req.body.jobNo, {from: web3.eth.accounts[5]});
-  console.log(returnVal);
-  res.send(returnVal);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[1];
+    HrmContract.deployed().then(function(instance) {
+      return instance.getJobsFromJobNo.call(req.body.jobNo, {from: account});
+    }).then(function(result) {
+      console.log(result);
+      res.send(result);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
 });
-
+// contractInstance.getJobsFromJobNo.call(req.body.jobNo, {from: web3.eth.accounts[7]});
 app.post('/getApplicants', function(req,res){
   _jobID = req.body.jobID;
   console.log("_jobID: "+ _jobID);
-  // var returnVal = contractInstance.getApplicants.call("ID1", {from: web3.eth.accounts[5]});
-  var retAppNo = contractInstance.getApplicants.call(_jobID);
-  console.log(retAppNo);
-  res.send(retAppNo);
+  // var returnVal = contractInstance.getApplicants.call("ID1", {from: web3.eth.accounts[7]});
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[1];
+    HrmContract.deployed().then(function(instance) {
+      return instance.getApplicants.call(req.body.jobID, {from: account});
+    }).then(function(result) {
+      console.log(result);
+      res.send(result);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
 });
 
 app.post('/getActiveJobs',function(req,res){
-  var returnVal = contractInstance.getActiveJobs.call({from: web3.eth.accounts[3]});
-  // console.log(returnVal);app.post('/getJobs',function(req,res){
-  console.log(returnVal);
-  // res.send(returnVal);
-  res.send(returnVal);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[2];
+    HrmContract.deployed().then(function(instance) {
+      return instance.getActiveJobs.call({from: account});
+    }).then(function(result) {
+      console.log(result);
+      res.send(result);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
 });
 
-app.post('/getJobsFromJobNo', function(req,res){
-  var returnVal = contractInstance.getJobsFromJobNo.call(req.body.jobNo, {from: web3.eth.accounts[5]});
-  console.log(returnVal);
-  res.send(true);
-});
 
 app.post('/setJobStatus',function(req,res){
-  console.log(req.body.jobID);
-  // var returnVal = contractInstance.setJobStatus.call(req.body.jobID, req.body.newJobStatus, {from: web3.eth.accounts[addressEmployer]});
-  // console.log(returnVal);
-  // res.send(returnVal);
-  res.send(true);
+  console.log(req.body);
+  if(req.body.newStatus == 'true'){
+    newStatus=true;
+  }else{
+    newStatus=false;
+  }
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[1];
+    HrmContract.deployed().then(function(instance) {
+      return instance.setJobStatus(req.body.jobID, newStatus, {from: account, gas:59999999});
+    }).then(function(result) {
+      console.log(result.receipt);
+      if(result.receipt.status ==1){
+        res.send(true);
+      }
+    }).catch(function(err) {
+      console.log(err.message);
+      res.send(false);
+    });
+  });
+  // res.send(true);
 });
+// var returnVal = contractInstance.setJobStatus.call(req.body.jobID, req.body.newJobStatus, {from: web3.eth.accounts[addressEmployer]});
 
 app.post('/getApplFromApplNo', function(req,res){
-  var returnVal = contractInstance.getApplFromApplNo.call(req.body.applicantNo, {from: web3.eth.accounts[5]});
-  console.log(returnVal);
-  res.send(returnVal);
+  console.log(req.body.applicantNo);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[7];
+    HrmContract.deployed().then(function(instance) {
+      return instance.getApplFromApplNo.call(req.body.applicantNo, {from: account});
+    }).then(function(result) {
+      console.log(result);
+      res.send(result);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
 });
 
 app.post('/viewJobDetails',function(req,res){
-  console.log(req.body.jobID);
-  var returnVal = contractInstance.viewJobDetails.call(req.body.jobID, {from: web3.eth.accounts[3]});
-  console.log(returnVal);
-  res.send(returnVal);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[1];
+    HrmContract.deployed().then(function(instance) {
+      return instance.viewJobDetails.call(req.body.jobID, {from: account});
+    }).then(function(result) {
+      console.log(result);
+      res.send(result);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
   // res.send(true);
 });
 
 app.post('/applyJob',function(req,res){
-  console.log(req.body.jobID);
-  var returnVal = contractInstance.applyJob.call(req.body.jobID, {from: web3.eth.accounts[3]});
-  // var returnVal = contractInstance.getJobs.call({from: web3.eth.accounts[5]});
-  console.log(returnVal);
-  res.send(returnVal);
-  // res.send(true);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }web3.eth.accounts[7]
+    var account = accounts[7];
+    HrmContract.deployed().then(function(instance) {
+      return instance.applyJob(req.body.jobID, {from: account});
+    }).then(function(result) {
+      if(result.receipt.status == 1){
+        res.send(true);
+      }
+    }).catch(function(err) {
+      console.log(err.message);
+      res.send(false);
+    });
+  });
 });
 
 app.post('/setApplicantData',function(req,res){
-  var returnVal = contractInstance.setApplicantData.call(req.body.fName,req.body.mName, req.body.lName, req.body.email, req.body.location, req.body.mobNo, req.body.dob, {from: web3.eth.accounts[3]});
-  console.log(returnVal);
-  res.send(returnVal);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[6];
+    HrmContract.deployed().then(function(instance) {
+      return instance.setApplicantData(req.body.fName,req.body.mName, req.body.lName, req.body.email, req.body.location, req.body.mobNo, req.body.dob, {from: account, gas:59999999});
+    }).then(function(result) {
+      if(result.receipt.status ==1){
+        res.send(true);
+      }
+    }).catch(function(err) {
+      console.log(err.message);
+      res.send(false);
+    });
+  });
 });
 
 app.post('/updateJob',function(req,res){
-  console.log(req.body);
-  var returnVal = contractInstance.updateJob.call(req.body.jobID, req.body.newJobID, req.body.newJobTitle, req.body.newJobJDLink, {from: web3.eth.accounts[5]});
-  console.log(returnVal);
-  // res.send(returnVal);
-  res.send(returnVal);
+  web3.eth.getAccounts(function(error, accounts) {
+    if (error) {
+      console.log(error);
+    }
+    var account = accounts[1];
+    HrmContract.deployed().then(function(instance) {
+      return instance.updateJob(req.body.jobID, req.body.newJobID, req.body.newJobTitle, req.body.newJobJDLink, {from: account, gas:5999999});
+    }).then(function(result) {
+      console.log(result);
+      res.send(result);
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  });
 });
 
 //Candidate actions
