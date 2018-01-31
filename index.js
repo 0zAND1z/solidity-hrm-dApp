@@ -42,7 +42,6 @@ app.use(express.static('website'));
 app.use(express.static('employer'));
 app.use(express.static('applicant'));
 
-//Method to post job parameters to jobpage
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -59,12 +58,8 @@ app.post("/parseMyUrl", function(req,res){
 
 app.post("/website/employer/addnewjob.html", function(req,res){
   console.log(req.body);
-  //update eth
 });
 
-// app.get("/website/employer/applicantlist.html/:jobArray",function(req,res,next){
-//   // res.
-// }
 
 app.use("/", router);
 
@@ -73,7 +68,6 @@ app.listen(3000, function(){
 });
 
 
-//web3js interface code
 app.get('/initializeWeb3',function(req,res){
   Web3 = require('web3');
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
@@ -92,15 +86,6 @@ var HrmArtifact = JSON.parse(contents);
 const HrmContract = TruffleContract(HrmArtifact);
 HrmContract.setProvider(web3.currentProvider);
 
-// contractInstance = HrmContract.deployed().then(function(error, instance) {
-// if (error) {
-//   console.log(error);
-// }
-//   return instace;
-// });
-
-//Employer actions
-
 app.post('/createJob',function(req,res){
   web3.eth.getAccounts(function(error, accounts) {
     if (error) {
@@ -118,7 +103,6 @@ app.post('/createJob',function(req,res){
       res.send(false);
     });
   });
-  // res.send(true);
 });
 
 app.post('/getJobs', function(req,res){
@@ -136,7 +120,6 @@ app.post('/getJobs', function(req,res){
       console.log(err.message);
     });
   });
-  // res.send(returnVal);
 });
 
 app.post('/getJobsFromJobNo', function(req,res){
@@ -154,13 +137,9 @@ app.post('/getJobsFromJobNo', function(req,res){
       console.log(err.message);
     });
   });
-});
-// contractInstance.getJobsFromJobNo.call(req.body.jobNo, {from: web3.eth.accounts[7]});
-app.post('/getApplicants', function(req,res){
+});app.post('/getApplicants', function(req,res){
   _jobID = req.body.jobID;
-  console.log("_jobID: "+ _jobID);
-  // var returnVal = contractInstance.getApplicants.call("ID1", {from: web3.eth.accounts[7]});
-  web3.eth.getAccounts(function(error, accounts) {
+  console.log("_jobID: "+ _jobID);  web3.eth.getAccounts(function(error, accounts) {
     if (error) {
       console.log(error);
     }
@@ -217,11 +196,7 @@ app.post('/setJobStatus',function(req,res){
       console.log(err.message);
       res.send(false);
     });
-  });
-  // res.send(true);
-});
-// var returnVal = contractInstance.setJobStatus.call(req.body.jobID, req.body.newJobStatus, {from: web3.eth.accounts[addressEmployer]});
-
+  });});
 app.post('/getApplFromApplNo', function(req,res){
   console.log(req.body.applicantNo);
   web3.eth.getAccounts(function(error, accounts) {
@@ -254,9 +229,7 @@ app.post('/viewJobDetails',function(req,res){
     }).catch(function(err) {
       console.log(err.message);
     });
-  });
-  // res.send(true);
-});
+  });});
 
 app.post('/applyJob',function(req,res){
   web3.eth.getAccounts(function(error, accounts) {
@@ -312,7 +285,3 @@ app.post('/updateJob',function(req,res){
     });
   });
 });
-
-//Candidate actions
-// function setApplicantData(var address, var firstName, var middleName,var lastName,
-// var emailID, var location, string _mobNo, uint8 _age)

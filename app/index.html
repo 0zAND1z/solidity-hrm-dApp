@@ -9,7 +9,6 @@
   crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
   <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
 </head>
@@ -41,16 +40,11 @@
 
   function getWeb3(callback) {
   if (typeof window.web3 === 'undefined') {
-    // no web3, use fallback
     alert("Please use a web3 browser or install Metamask browser extension")
     console.error("Please use a web3 browser");
   } else {
-    // window.web3 == web3 most of the time. Don't override the provided,
-    // web3, just wrap it in your Web3.
     var myWeb3 = new Web3(window.web3.currentProvider);
 
-    // the default account doesn't seem to be persisted, copy it to our
-    // new instance
     myWeb3.eth.defaultAccount = window.web3.eth.defaultAccount;
 
     callback(myWeb3);

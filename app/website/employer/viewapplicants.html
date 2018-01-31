@@ -9,7 +9,6 @@
   			  crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
     <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/style.css" />
     <script>
@@ -29,14 +28,12 @@
         });
 
 
-        // jobID = $('#jobID').html().toString();
       setTimeout(function(){
         console.log(jobID);
         $.post("/getApplicants", {jobID:jobID}, function(data){
           if(data!=null)
           {
             arrApplicantNo = data;
-            // console.log(data);
           }
         });
       }, 200);
@@ -50,8 +47,6 @@
               if(data!=null){
                 console.log(data);
                 appList[i] = data;
-                // console.log(appList[i][2]);
-
                 $("#applicantsList").append('<li class="row">' +
                 '<div class="col-md-2">' + appList[i][0] + '</div>' +
                 '<div class="col-md-2">' + appList[i][1] + '</div>' +
@@ -66,27 +61,6 @@
           });
         }
       }, 500);
-        // } 300);
-        // var applicantList = '{ "applicants" : [' +
-        // '{ "fname":"Kaby" , "mname":"Broadwell", "lname":"Lake", "email":"testemail1@test.net", "location": "NY", "mobno":"12312XXXX1", "dob":"19 Nov, 1977"},' +
-        // '{ "fname":"Coffee" , "mname":"Haswell", "lname":"Lake", "email":"testemail2@test.net", "location": "Bengaluru", "mobno":"86412XXXX1", "dob":"22 Mar 1970"} ]}';
-        //
-        //
-        // // var applicantList = getApplicants(jobID);
-        //
-        // var parsedJson = JSON.parse(applicantList);
-        // for(i=0; i < parsedJson.applicants.length ; i++){
-        //   $("#applicantsList").append('<li class="row">' +
-        //   '<div class="col-md-2">' + parsedJson.applicants[i].fname + '</div>' +
-        //   '<div class="col-md-2">' + parsedJson.applicants[i].mname + '</div>' +
-        //   '<div class="col-md-2">' + parsedJson.applicants[i].lname + '</div>' +
-        //   '<div class="col-md-2">' + parsedJson.applicants[i].email + '</div>' +
-        //   '<div class="col-md-1">' + parsedJson.applicants[i].location + '</div>' +
-        //   '<div class="col-md-1">' + parsedJson.applicants[i].mobno + '</div>' +
-        //   '<div class="col-md-2">' + parsedJson.applicants[i].dob + '</div>' +
-        //   '</li>' +
-        //   '<br>');
-        // };
       });
     </script>
     <style>
@@ -109,7 +83,6 @@
       </div>
     </br>
     <div id="jobID" hidden></div>
-    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </ul>
   </body>
   <script>
