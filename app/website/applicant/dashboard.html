@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard</title>
+  <title>Dashboard | Applicants</title>
   <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
   <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
+  <style>
+    #addAppButton{
+      float:right;
+    }
+  </style>
 </head>
 <body>
   <div class="container-fluid">
-    <h1 class="jumbotron">Aicumen Job Positions</h1>
-    <br>
+    <div class="jumbotron">
+    <h1>Aicumen Job Positions</h1>
+    <a id="addAppButton" href="/website/applicant/addapplicant.html" class="col-lg-4 btn btn-success" >Add Your Details</a>
+  </div>
     <ul id="jobsList">
       <li class="row" id="jobsHeader">
         <div class="col-md-4 font-weight-bold">JOB id</div>
         <label class="col-md-4 font-weight-bold">JOB title</label>
-        <!-- <label class="col-md-4 font-weight-bold">JOB Description</label> -->
       </li>
     </br>
-    <!-- <li class="row"><div class="col-sm"><button class="apply btn" onclick="showApplicationForm()">Apply</button></div></li> -->
   </ul>
 </div>
 </body>
@@ -43,29 +47,51 @@ function confirm(){
 
 var path="website/applicant/jobpage.html";
 
-var jobsList = '{ "jobs" : [' +
-'{ "jobID":"123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link"},' +
-'{ "jobID":"345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link"} ]}';
-
 function addJobs(){
+  var arrJobNo = new Array();
+  var jobsList = new Array();
 
-  $.post("http://localhost:3000/getActiveJobs", function(data){
-            if(data===true)
-              {
-                // alert("Added jobs successfully!!");
-                // window.location.replace("/website/employer/dashboard.html");
-              }
-          });
+  $.post("/getActiveJobs", function(data){
+    if(data!=null)
+    {
+      arrJobNo = data;
+      console.log(arrJobNo);
+      // jobsList = data;
+    }
+  });
 
-  var parsedJson = JSON.parse(jobsList);
-  for(i=0; i < parsedJson.jobs.length ; i++){
-    var jobs = document.getElementsByClassName("jobs");
-    $("#jobsList").append('<li class="row">' +
-    '<div class="col-md-4">' + parsedJson.jobs[i].jobID + '</div>' +
-    '<a class="col-md-4 font-weight-bold" href="/jobpage.html?jobID=' + parsedJson.jobs[i].jobID +'">' + parsedJson.jobs[i].jobTitle + '</div>' +
-    '</li>' +
-    '<br>');
-  };
+  setTimeout(function(){
+    console.log(arrJobNo);
+    for(var i = 0; i < arrJobNo.length; i++){
+      $.post("/getJobsFromJobNo", {jobNo:arrJobNo[i]}, function(data){
+        jobsList[i] = new Array();
+        if(data!=null)
+        {
+          jobsList[i] = data;
+          console.log(jobsList[i][2]);
+          $("#jobsList").append('<li class="row ' + '">' +
+          '<div class="col-md-4">' + jobsList[i][1] + '</div>' +
+          '<a class="col-md-4 font-weight-bold" href="/jobpage.html?jobID=' + jobsList[i][1] + '">' + jobsList[i][2] + '</a>' +
+          '</li>' +
+          '<br>');
+        }
+      });
+    }
+  }, 400);
+
+    for(i=0; i < arrJobNo.length ; i++){
+      console.log(jobsList[i]);
+      
+      var jobs = document.getElementsByClassName("jobs");
+      var jobID = jobsList[0];
+
+      $("#jobsList").append('<li class="row ' + '">' +
+      '<div class="col-md-4">' + jobID + '</div>' +
+      '<a class="col-md-4 font-weight-bold" href="/viewapplicants.html?jobID=' + parsedJson.jobs[i].jobID + '">' + parsedJson.jobs[i].jobTitle + '</a>' +
+      '<a href="/editJob.html?jobID=' + parsedJson.jobs[i].jobID +'" class="col-md-1 offset-md-1 btn btn-info">Edit Job</a>' +
+      '</li>' +
+      '<br>');
+    };
 }
 </script>
 </html>

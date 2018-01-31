@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Add a Job</title>
+  <title>Add Job | Employer</title>
   <script
 			  src="https://code.jquery.com/jquery-3.2.1.min.js"
 			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 			  crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
   <link rel="stylesheet" type="text/css" href="/app/lib/css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="/style.css" />
   <script>
@@ -53,7 +52,7 @@ function createNewJob(){
   var jobTitle = $('#jobTitle').val();
   var jobJDLink = $('#jdLink').val();
 
-    $.post("http://localhost:3000/createJob",{jobID : jobID, jobTitle: jobTitle, jobJDLink : jobJDLink}, function(data){
+    $.post("/createJob",{jobID : jobID, jobTitle: jobTitle, jobJDLink : jobJDLink}, function(data){
               if(data===true)
                 {
                   alert("Created successfully!!");

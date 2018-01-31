@@ -1,12 +1,12 @@
 <!DOCTYPE html>
- <meta charset="UTF-8">
+<meta charset="UTF-8">
 <html>
 <head>
   <title>Jobs | Aicumen Technologies</title>
   <script
-        src="https://code.jquery.com/jquery-3.2.1.min.js"
-        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-        crossorigin="anonymous"></script>
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <!-- <script type="text/javascript" src="/lib/js/jquery.min.js"></script> -->
@@ -15,13 +15,49 @@
 </head>
 
 <body>
-  <div class="container-fluid text-center jumbotron">
-    <h1 class="">Aicumen Jobs</h1>
-    <br>
-    <div class="row justify-content-md-center login">
-      <a class="btn btn-info col-md-5" href="website/employer/dashboard.html" type="button"/>Login as Employer</a>
-      <a class="btn btn-info col-md-5 offset-md-1" href="website/applicant/dashboard.html" type="button">Login as Job Seeker</a>
+  <div class="vertical-center jumbotron">
+    <div class="text-center container">
+      <h1 class="">Aicumen Jobs</h1>
+      <br>
+      <div class="row justify-content-md-center">
+        <a class="btn btn-info col-md-5" href="website/employer/dashboard.html" type="button"/>Login as Employer</a>
+        <a class="btn btn-info col-md-5 offset-md-1" href="website/applicant/dashboard.html" type="button">Login as Job Seeker</a>
+      </div>
     </div>
   </div>
+  <script>
+
+  function startapp(web3){
+    $.get("/initializeWeb3",{web3: web3}, function(data){
+      if(data!=null)
+      {
+
+      }
+    });
+  }
+  window.addEventListener('load', function() {
+    getWeb3(startapp);
+  });
+
+  function getWeb3(callback) {
+  if (typeof window.web3 === 'undefined') {
+    // no web3, use fallback
+    alert("Please use a web3 browser or install Metamask browser extension")
+    console.error("Please use a web3 browser");
+  } else {
+    // window.web3 == web3 most of the time. Don't override the provided,
+    // web3, just wrap it in your Web3.
+    var myWeb3 = new Web3(window.web3.currentProvider);
+
+    // the default account doesn't seem to be persisted, copy it to our
+    // new instance
+    myWeb3.eth.defaultAccount = window.web3.eth.defaultAccount;
+
+    callback(myWeb3);
+  }
+
+}
+
+</script>
 </body>
 </html>
