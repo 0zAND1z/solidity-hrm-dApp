@@ -1,0 +1,3 @@
+build/**/*
+contracts/HrmContract_sol_HrmContract.abi
+contracts/HrmContract_sol_HrmContract.bin
