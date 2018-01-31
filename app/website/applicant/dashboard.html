@@ -76,7 +76,7 @@ function addJobs(){
   // '{ "jobID":"123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : false},' +
   // '{ "jobID":"345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : true} ]}';
 
-  $.post("/getJobs", function(data){
+  $.post("/getActiveJobs", function(data){
     if(data!=null)
     {
       arrJobNo = data;
@@ -105,23 +105,11 @@ function addJobs(){
       });
     }
   }, 400);
-  // var parsedJson = JSON.parse(jobsList);
 
     for(i=0; i < arrJobNo.length ; i++){
       console.log(jobsList[i]);
 
       var jobs = document.getElementsByClassName("jobs");
-
-      // var status, buttonClass, liClass;
-      // if(parsedJson.jobs[i].isActive){
-      //   status = "Deactivate";
-      //   buttonClass = "btn-danger";
-      //   liClass = "";
-      // }else {
-      //   status = "Activate";
-      //   buttonClass = "btn-success";
-      //   liClass = "bg-secondary"
-      // }
 
       var jobID = jobsList[0];
 

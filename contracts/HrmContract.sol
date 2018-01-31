@@ -55,6 +55,8 @@ contract HrmContract {
 
     function updateJob(string _realJobID, string _newJobID, string _newJobTitle, string _newJobJDLink)  returns (bool jobUpdateStatus) {
         uint reqJobNo = jobID_jobNo[_realJobID];
+        delete jobID_jobNo[_realJobID];
+        jobID_jobNo[_newJobID] = reqJobNo;
         jobArray[reqJobNo].jobID = _newJobID;
         jobArray[reqJobNo].jobTitle = _newJobTitle;
         jobArray[reqJobNo].jobJDLink = _newJobJDLink;
@@ -75,9 +77,9 @@ contract HrmContract {
         return retJobNoArray;
     }
 
-    function getJobsFromJobNo(uint _jobNo) returns (uint ret_jobNo, string ret_jobID, string ret_jobTitle, string ret_jobJDLink) {
+    function getJobsFromJobNo(uint _jobNo) returns (uint ret_jobNo, string ret_jobID, string ret_jobTitle, string ret_jobJDLink, bool ret_isJobActive) {
         if(jobNo != 0){
-            return(jobArray[_jobNo].jobNo, jobArray[_jobNo].jobID, jobArray[_jobNo].jobTitle, jobArray[_jobNo].jobJDLink);
+            return(jobArray[_jobNo].jobNo, jobArray[_jobNo].jobID, jobArray[_jobNo].jobTitle, jobArray[_jobNo].jobJDLink, jobArray[_jobNo].isJobActive);
         }else{
             return;
         }
@@ -102,6 +104,7 @@ contract HrmContract {
     function setJobStatus(string _jobID, bool _isJobActive)  returns (bool retSetJobStatus) {
         uint reqJobNo = jobID_jobNo[_jobID];
         jobArray[reqJobNo].isJobActive = _isJobActive;
+        delete jobNo_isJobActive[reqJobNo];
         jobNo_isJobActive[reqJobNo] = _isJobActive;
         return true;
     }
@@ -134,8 +137,12 @@ contract HrmContract {
 
     function applyJob(string _jobID)  returns (bool applyJobStatus) {
         uint reqJobNo = jobID_jobNo[_jobID];
+        for(uint i = 0; i < jobNo_applicantNo[reqJobNo].length; i++){
+            if(jobNo_applicantNo[reqJobNo][i] == applicantAddr_applicantNo[msg.sender]){
+                return false;
+            }
+        }
         jobNo_applicantNo[reqJobNo].push(applicantAddr_applicantNo[msg.sender]);
-
         return true;
     }
 

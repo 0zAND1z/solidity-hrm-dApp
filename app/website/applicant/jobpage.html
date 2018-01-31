@@ -62,7 +62,7 @@ $(document).ready(function() {
   });
 
   setTimeout(function(){
-    jobID = $('#jobID').html(data);
+    jobID = $('#jobID').html();
     $.post("/viewJobDetails",{jobID: jobID}, function(data){
       if(data===true)
       {

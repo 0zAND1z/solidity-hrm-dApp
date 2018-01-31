@@ -26,7 +26,6 @@
 </br>
 <div hidden id="arrJobNo"></div>
 <div class="mx-auto div-centered"><a id="addNewJob" type="button" class="btn btn-success" href="/website/employer/addnewjob.html">Create a job opening</a></div>
-</body>
 
 <script type="text/javascript">
 $('document').ready(function(){
@@ -42,16 +41,12 @@ function refreshJobs(){
 
   var arrJobNo = new Array();
   var jobsList = new Array();
-  // var jobsList = '{ "jobs" : [' +
-  // '{ "jobID":"123" , "jobTitle":"UI", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : false},' +
-  // '{ "jobID":"345" , "jobTitle":"Full-stack", "jobURL":"Job Details", "jobDescription":"google-docs JD link", "isActive" : true} ]}';
 
   $.post("/getJobs", function(data){
     if(data!=null)
     {
       arrJobNo = data;
       console.log(arrJobNo);
-      // jobsList = data;
     }
   });
 
@@ -60,15 +55,25 @@ function refreshJobs(){
     for(var i = 0; i < arrJobNo.length; i++){
       $.post("/getJobsFromJobNo", {jobNo:arrJobNo[i]}, function(data){
         jobsList[i] = new Array();
+        jobsList[i] = data;
+        var status, buttonClass, liClass;
+
+        if(jobsList[i][4]){
+          status = "Deactivate";
+          buttonClass = "btn-danger";
+          liClass = "";
+        }else {
+          status = "Activate";
+          buttonClass = "btn-success";
+          liClass = "bg-secondary"
+        }
+
         if(data!=null)
         {
-          // console.log(data);
-          jobsList[i] = data;
-          console.log(jobsList[i][2]);
-          $("#jobsList").append('<li class="row ' + '">' +
+          $("#jobsList").append('<li class="row ' + liClass + '">' +
           '<div class="col-md-4">' + jobsList[i][1] + '</div>' +
           '<a class="col-md-4 font-weight-bold" href="/viewapplicants.html?jobID=' + jobsList[i][1] + '">' + jobsList[i][2] + '</a>' +
-          // '<input type="button" onclick="toggleStatus('+parsedJson.jobs[i].jobID +','+parsedJson.jobs[i].isActive+')" class="col-md-1 btn '+ buttonClass + ' statusButton" value="'+ status +'">' +
+          '<input type="button" onclick="toggleStatus(\''+jobsList[i][1]+'\','+jobsList[i][4]+')" class="col-md-1 btn '+ buttonClass + ' statusButton" value="'+ status +'"/>' +
           '<a href="/editJob.html?jobID=' + jobsList[i][1] +'" class="col-md-1 offset-md-1 btn btn-info">Edit Job</a>' +
           '</li>' +
           '<br>');
@@ -76,49 +81,25 @@ function refreshJobs(){
       });
     }
   }, 400);
-  // var parsedJson = JSON.parse(jobsList);
 
     for(i=0; i < arrJobNo.length ; i++){
       console.log(jobsList[i]);
-
-      var jobs = document.getElementsByClassName("jobs");
-
-      // var status, buttonClass, liClass;
-      // if(parsedJson.jobs[i].isActive){
-      //   status = "Deactivate";
-      //   buttonClass = "btn-danger";
-      //   liClass = "";
-      // }else {
-      //   status = "Activate";
-      //   buttonClass = "btn-success";
-      //   liClass = "bg-secondary"
-      // }
-
-      var jobID = jobsList[0];
-
-
-      $("#jobsList").append('<li class="row ' + '">' +
-      '<div class="col-md-4">' + jobID + '</div>' +
-      '<a class="col-md-4 font-weight-bold" href="/viewapplicants.html?jobID=' + parsedJson.jobs[i].jobID + '">' + parsedJson.jobs[i].jobTitle + '</a>' +
-      // '<input type="button" onclick="toggleStatus('+parsedJson.jobs[i].jobID +','+parsedJson.jobs[i].isActive+')" class="col-md-1 btn '+ buttonClass + ' statusButton" value="'+ status +'">' +
-      '<a href="/editJob.html?jobID=' + parsedJson.jobs[i].jobID +'" class="col-md-1 offset-md-1 btn btn-info">Edit Job</a>' +
-      '</li>' +
-      '<br>');
-    };
+    }
 }
 
 function toggleStatus(jobID, realStatus){
 
+  console.log("Tell me");
   $.post("/setJobStatus",  {jobID: jobID, newStatus : !realStatus} , function(data){
     if(data===true)
     {
-      // alert("status set");
+      alert("status set!");
       // jobsList = data;
     }
   });
   $("#jobsList").html('');
   refreshJobs();
 }
-
 </script>
+</body>
 </html>

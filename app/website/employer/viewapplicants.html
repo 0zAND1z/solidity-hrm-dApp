@@ -36,15 +36,16 @@
           if(data!=null)
           {
             arrApplicantNo = data;
-            console.log(data);
+            // console.log(data);
           }
         });
       }, 200);
 
         setTimeout(function(){
-          console.log(arrApplicantNo);
           for(var i = 0; i < arrApplicantNo.length; i++){
-            $.post("/getApplFromApplNo", {jobNo:arrApplicantNo[i]}, function(data){
+            console.log(arrApplicantNo[i]);
+            appList = new Array();
+            $.post("/getApplFromApplNo", {applicantNo: arrApplicantNo[i]}, function(data){
               appList[i] = new Array();
               if(data!=null){
                 console.log(data);
@@ -52,13 +53,13 @@
                 // console.log(appList[i][2]);
 
                 $("#applicantsList").append('<li class="row">' +
-                '<div class="col-md-2">' + jobsList[i][1] + '</div>' +
-                '<div class="col-md-2">' + jobsList[i][2] + '</div>' +
-                '<div class="col-md-2">' + jobsList[i][3] + '</div>' +
-                '<div class="col-md-2">' + jobsList[i][4] + '</div>' +
-                '<div class="col-md-1">' + jobsList[i][5] + '</div>' +
-                '<div class="col-md-1">' + jobsList[i][6] + '</div>' +
-                '<div class="col-md-2">' + jobsList[i][7] + '</div>' +
+                '<div class="col-md-2">' + appList[i][0] + '</div>' +
+                '<div class="col-md-2">' + appList[i][1] + '</div>' +
+                '<div class="col-md-2">' + appList[i][2] + '</div>' +
+                '<div class="col-md-2">' + appList[i][3] + '</div>' +
+                '<div class="col-md-1">' + appList[i][4] + '</div>' +
+                '<div class="col-md-1">' + appList[i][5] + '</div>' +
+                '<div class="col-md-2">' + appList[i][6] + '</div>' +
                 '</li>' +
                 '<br>');
             }
