@@ -1,4 +1,3 @@
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -93,7 +92,7 @@ app.post('/createJob',function(req,res){
     }
     var account = accounts[1];
     HrmContract.deployed().then(function(instance) {
-      return instance.createJob(req.body.jobID, req.body.jobTitle, req.body.jobJDLink, {from: account, gas:59999999});
+      return instance.createJob(req.body.jobID, req.body.jobTitle, req.body.jobJDLink, {from: account, gas:599999});
     }).then(function(result) {
       if(result.receipt.status ==1){
         res.send(true);
@@ -137,7 +136,9 @@ app.post('/getJobsFromJobNo', function(req,res){
       console.log(err.message);
     });
   });
-});app.post('/getApplicants', function(req,res){
+});
+
+app.post('/getApplicants', function(req,res){
   _jobID = req.body.jobID;
   console.log("_jobID: "+ _jobID);  web3.eth.getAccounts(function(error, accounts) {
     if (error) {
@@ -203,7 +204,7 @@ app.post('/getApplFromApplNo', function(req,res){
     if (error) {
       console.log(error);
     }
-    var account = accounts[7];
+    var account = accounts[1];
     HrmContract.deployed().then(function(instance) {
       return instance.getApplFromApplNo.call(req.body.applicantNo, {from: account});
     }).then(function(result) {
@@ -220,7 +221,7 @@ app.post('/viewJobDetails',function(req,res){
     if (error) {
       console.log(error);
     }
-    var account = accounts[1];
+    var account = accounts[2];
     HrmContract.deployed().then(function(instance) {
       return instance.viewJobDetails.call(req.body.jobID, {from: account});
     }).then(function(result) {
@@ -235,8 +236,8 @@ app.post('/applyJob',function(req,res){
   web3.eth.getAccounts(function(error, accounts) {
     if (error) {
       console.log(error);
-    }web3.eth.accounts[7]
-    var account = accounts[7];
+    }
+    var account = accounts[2];
     HrmContract.deployed().then(function(instance) {
       return instance.applyJob(req.body.jobID, {from: account});
     }).then(function(result) {
@@ -255,7 +256,7 @@ app.post('/setApplicantData',function(req,res){
     if (error) {
       console.log(error);
     }
-    var account = accounts[6];
+    var account = accounts[2];
     HrmContract.deployed().then(function(instance) {
       return instance.setApplicantData(req.body.fName,req.body.mName, req.body.lName, req.body.email, req.body.location, req.body.mobNo, req.body.dob, {from: account, gas:59999999});
     }).then(function(result) {

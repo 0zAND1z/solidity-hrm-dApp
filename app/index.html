@@ -44,7 +44,6 @@
     console.error("Please use a web3 browser");
   } else {
     var myWeb3 = new Web3(window.web3.currentProvider);
-
     myWeb3.eth.defaultAccount = window.web3.eth.defaultAccount;
 
     callback(myWeb3);
