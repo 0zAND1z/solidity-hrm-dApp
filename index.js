@@ -1,4 +1,3 @@
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
@@ -42,7 +41,6 @@ app.use(express.static('website'));
 app.use(express.static('employer'));
 app.use(express.static('applicant'));
 
-//Method to post job parameters to jobpage
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -59,12 +57,8 @@ app.post("/parseMyUrl", function(req,res){
 
 app.post("/website/employer/addnewjob.html", function(req,res){
   console.log(req.body);
-  //update eth
 });
 
-// app.get("/website/employer/applicantlist.html/:jobArray",function(req,res,next){
-//   // res.
-// }
 
 app.use("/", router);
 
@@ -73,7 +67,6 @@ app.listen(3000, function(){
 });
 
 
-//web3js interface code
 app.get('/initializeWeb3',function(req,res){
   Web3 = require('web3');
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
@@ -92,15 +85,6 @@ var HrmArtifact = JSON.parse(contents);
 const HrmContract = TruffleContract(HrmArtifact);
 HrmContract.setProvider(web3.currentProvider);
 
-// contractInstance = HrmContract.deployed().then(function(error, instance) {
-// if (error) {
-//   console.log(error);
-// }
-//   return instace;
-// });
-
-//Employer actions
-
 app.post('/createJob',function(req,res){
   web3.eth.getAccounts(function(error, accounts) {
     if (error) {
@@ -108,7 +92,7 @@ app.post('/createJob',function(req,res){
     }
     var account = accounts[1];
     HrmContract.deployed().then(function(instance) {
-      return instance.createJob(req.body.jobID, req.body.jobTitle, req.body.jobJDLink, {from: account, gas:59999999});
+      return instance.createJob(req.body.jobID, req.body.jobTitle, req.body.jobJDLink, {from: account, gas:599999});
     }).then(function(result) {
       if(result.receipt.status ==1){
         res.send(true);
@@ -118,7 +102,6 @@ app.post('/createJob',function(req,res){
       res.send(false);
     });
   });
-  // res.send(true);
 });
 
 app.post('/getJobs', function(req,res){
@@ -136,7 +119,6 @@ app.post('/getJobs', function(req,res){
       console.log(err.message);
     });
   });
-  // res.send(returnVal);
 });
 
 app.post('/getJobsFromJobNo', function(req,res){
@@ -155,12 +137,10 @@ app.post('/getJobsFromJobNo', function(req,res){
     });
   });
 });
-// contractInstance.getJobsFromJobNo.call(req.body.jobNo, {from: web3.eth.accounts[7]});
+
 app.post('/getApplicants', function(req,res){
   _jobID = req.body.jobID;
-  console.log("_jobID: "+ _jobID);
-  // var returnVal = contractInstance.getApplicants.call("ID1", {from: web3.eth.accounts[7]});
-  web3.eth.getAccounts(function(error, accounts) {
+  console.log("_jobID: "+ _jobID);  web3.eth.getAccounts(function(error, accounts) {
     if (error) {
       console.log(error);
     }
@@ -217,18 +197,14 @@ app.post('/setJobStatus',function(req,res){
       console.log(err.message);
       res.send(false);
     });
-  });
-  // res.send(true);
-});
-// var returnVal = contractInstance.setJobStatus.call(req.body.jobID, req.body.newJobStatus, {from: web3.eth.accounts[addressEmployer]});
-
+  });});
 app.post('/getApplFromApplNo', function(req,res){
   console.log(req.body.applicantNo);
   web3.eth.getAccounts(function(error, accounts) {
     if (error) {
       console.log(error);
     }
-    var account = accounts[7];
+    var account = accounts[1];
     HrmContract.deployed().then(function(instance) {
       return instance.getApplFromApplNo.call(req.body.applicantNo, {from: account});
     }).then(function(result) {
@@ -245,7 +221,7 @@ app.post('/viewJobDetails',function(req,res){
     if (error) {
       console.log(error);
     }
-    var account = accounts[1];
+    var account = accounts[2];
     HrmContract.deployed().then(function(instance) {
       return instance.viewJobDetails.call(req.body.jobID, {from: account});
     }).then(function(result) {
@@ -254,16 +230,14 @@ app.post('/viewJobDetails',function(req,res){
     }).catch(function(err) {
       console.log(err.message);
     });
-  });
-  // res.send(true);
-});
+  });});
 
 app.post('/applyJob',function(req,res){
   web3.eth.getAccounts(function(error, accounts) {
     if (error) {
       console.log(error);
-    }web3.eth.accounts[7]
-    var account = accounts[7];
+    }
+    var account = accounts[2];
     HrmContract.deployed().then(function(instance) {
       return instance.applyJob(req.body.jobID, {from: account});
     }).then(function(result) {
@@ -282,7 +256,7 @@ app.post('/setApplicantData',function(req,res){
     if (error) {
       console.log(error);
     }
-    var account = accounts[6];
+    var account = accounts[2];
     HrmContract.deployed().then(function(instance) {
       return instance.setApplicantData(req.body.fName,req.body.mName, req.body.lName, req.body.email, req.body.location, req.body.mobNo, req.body.dob, {from: account, gas:59999999});
     }).then(function(result) {
@@ -312,7 +286,3 @@ app.post('/updateJob',function(req,res){
     });
   });
 });
-
-//Candidate actions
-// function setApplicantData(var address, var firstName, var middleName,var lastName,
-// var emailID, var location, string _mobNo, uint8 _age)

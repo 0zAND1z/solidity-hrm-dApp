@@ -80,12 +80,8 @@ function addJobs(){
   }, 400);
 
     for(i=0; i < arrJobNo.length ; i++){
-      console.log(jobsList[i]);
-      
       var jobs = document.getElementsByClassName("jobs");
-
       var jobID = jobsList[0];
-
       $("#jobsList").append('<li class="row ' + '">' +
       '<div class="col-md-4">' + jobID + '</div>' +
       '<a class="col-md-4 font-weight-bold" href="/viewapplicants.html?jobID=' + parsedJson.jobs[i].jobID + '">' + parsedJson.jobs[i].jobTitle + '</a>' +

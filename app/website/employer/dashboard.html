@@ -19,7 +19,6 @@
     <li class="row" id="jobsHeader">
       <label class="col-md-4 font-weight-bold">JOB id</label>
       <label class="col-md-4 font-weight-bold">JOB title</label>
-      <!-- <label class="col-md-4 font-weight-bold">Set Status Options</label> -->
     </li>
   </br>
 </ul>
@@ -29,7 +28,6 @@
 
 <script type="text/javascript">
 $('document').ready(function(){
-  //refresh jobsList
   refreshJobs();
 });
 function showApplicationForm(){
@@ -94,7 +92,6 @@ function toggleStatus(jobID, realStatus){
     if(data===true)
     {
       alert("status set!");
-      // jobsList = data;
     }
   });
   $("#jobsList").html('');
@@ -102,8 +99,4 @@ function toggleStatus(jobID, realStatus){
 }
 </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> refs/remotes/origin/master
